@@ -1,0 +1,64 @@
+import React from 'react';
+
+import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import PlayerList from "./containers/PlayerList";
+
+const { SubMenu } = Menu;
+const { Header, Content, Sider, Footer } = Layout;
+
+const MainLayout = () => (
+    <Layout>
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+            <div className="logo" />
+            <Menu
+                theme="dark"
+                mode="horizontal"
+                defaultSelectedKeys={['2']}
+                style={{ lineHeight: '64px' }}
+            >
+                <Menu.Item key="1">nav 1</Menu.Item>
+                <Menu.Item key="2">nav 2</Menu.Item>
+                <Menu.Item key="3">nav 3</Menu.Item>
+            </Menu>
+        </Header>
+        <Layout style={{ marginTop: 64 }}>
+            <Sider
+                style={{
+                    overflow: 'auto',
+                    height: '100vh',
+                    position: 'fixed',
+                    left: 0
+                }}
+            >
+                <div className="logo" />
+                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+                    <Menu.Item key="1">
+                        <Icon type="user" />
+                        <span className="nav-text">nav 1</span>
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                        <Icon type="video-camera" />
+                        <span className="nav-text">nav 2</span>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                        <Icon type="upload" />
+                        <span className="nav-text">nav 3</span>
+                    </Menu.Item>
+                </Menu>
+            </Sider>
+            <Content style={{ padding: '0 50px', marginLeft: 200 }}>
+                <Breadcrumb style={{ margin: '16px 0' }}>
+                    <Breadcrumb.Item>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item>List</Breadcrumb.Item>
+                    <Breadcrumb.Item>App</Breadcrumb.Item>
+                </Breadcrumb>
+                <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
+                    <PlayerList/>
+                </div>
+            </Content>
+        </Layout>
+        <Footer style={{ textAlign: 'center' }}>Saptor ©2018</Footer>
+    </Layout>
+);
+
+export default MainLayout
