@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import {Layout, Menu, Breadcrumb, Icon} from 'antd';
 import PlayerList from "./containers/PlayerList";
+import {Link, Redirect, Route, Switch} from "react-router-dom";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
@@ -33,12 +34,16 @@ const MainLayout = () => (
                 <div className="logo" />
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                     <Menu.Item key="1">
-                        <Icon type="user" />
-                        <span className="nav-text">nav 1</span>
+                        <Link to="/players">
+                            <Icon type="user" />
+                            <span className="nav-text">Players</span>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <Icon type="video-camera" />
-                        <span className="nav-text">nav 2</span>
+                        <Link to="/videos">
+                            <Icon type="video-camera" />
+                            <span className="nav-text">nav 2</span>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="3">
                         <Icon type="upload" />
@@ -53,11 +58,13 @@ const MainLayout = () => (
                     <Breadcrumb.Item>App</Breadcrumb.Item>
                 </Breadcrumb>
                 <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
-                    <PlayerList/>
+                    <Switch>
+                        <Route path="/players" component={PlayerList} />
+                    </Switch>
                 </div>
             </Content>
         </Layout>
-        <Footer style={{ textAlign: 'center' }}>Saptor ©2018</Footer>
+        <Footer style={{ textAlign: 'center' }}>Saptor ©2019 - All rights reserved</Footer>
     </Layout>
 );
 

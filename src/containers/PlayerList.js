@@ -11,10 +11,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(fetchPlayerList(filterData));
         fetch('/api/player')
             .then(resp => resp.json())
-            .then(playerList => {
-                dispatch(updatePlayerList(playerList));
-                console.log(playerList[0].name);
-            });
+            .then(playerList => dispatch(updatePlayerList(playerList)));
     }
 });
 
