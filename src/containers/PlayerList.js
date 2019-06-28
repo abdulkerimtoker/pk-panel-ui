@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import PlayerList from "../components/PlayerList";
 
 const mapStateToProps = state => ({
-    playerList: state.playerList
+    playerList: state.playerList,
 });
 
 const mapDispatchToProps = dispatch => ({

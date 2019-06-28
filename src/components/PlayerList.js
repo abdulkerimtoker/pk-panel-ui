@@ -19,11 +19,11 @@ export default class PlayerList extends React.Component {
                 <Table dataSource={this.props.playerList} rowKey="id">
                     <Column title="ID" dataIndex="id" key="id" />
                     <Column title="Name" dataIndex="name" key="name" />
-                    <Column title="GUID" dataIndex="uniqueId" key="guid" />
+                    <Column title="GUID" dataIndex="uniqueId" key="guid" render={() => <label>Hidden for demo</label>} />
                     <Column title="Faction" dataIndex="faction.name" key="faction" />
                     <Column title="Troop" dataIndex="troop.name" key="troop" />
-                    <Column title="Gold" dataIndex="gold" key="gold" />
-                    <Column dataIndex="id" render={(id) => <Link to={'/player/' + id}>Manage {id}</Link>} key="manage" />
+                    <Column title="Gold" dataIndex="gold" key="gold" render={() => <label>Hidden for demo</label>} />
+                    <Column dataIndex="id" render={(id) => <Link to={'/player/' + id}>Manage</Link>} key="manage" />
                 </Table>
             </div>
         );

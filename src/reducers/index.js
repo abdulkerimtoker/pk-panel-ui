@@ -1,8 +1,9 @@
 import {combineReducers} from "redux";
 import { playerList } from "./playerList"
-import {player} from "./playerPage";
+import {player, troopList} from "./playerPage";
 
 export default combineReducers({
     playerList,
-    player
+    player,
+    troopList
 });
