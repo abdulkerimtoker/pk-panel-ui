@@ -1,6 +1,7 @@
 import React from "react";
-import {Button, Table} from "antd";
+import {Button, Input, Table} from "antd";
 import Column from "antd/es/table/Column";
+import Search from "antd/es/input/Search";
 
 export default class PlayerList extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class PlayerList extends React.Component {
         return (
             <div>
                 <div>
-                    <Button onClick={this.props.fetchPlayerList}>Fetch</Button>
+                    <Search onChange={() => alert('sea')} />
                 </div>
                 <Table dataSource={this.props.playerList} rowKey="id">
                     <Column title="ID" dataIndex="id" key="id"/>
@@ -20,7 +21,7 @@ export default class PlayerList extends React.Component {
                     <Column title="Faction" dataIndex="faction.name" key="faction.name"/>
                     <Column title="Troop" dataIndex="troop.name" key="troop.name"/>
                     <Column title="Gold" dataIndex="gold" key="gold"/>
-                    <Column render={() => <Button>Manage</Button>} />
+                    <Column dataIndex="id" key="id" render={(id) => <Button>Manage</Button>} />
                 </Table>
             </div>
         );
