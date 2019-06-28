@@ -3,6 +3,7 @@ import React from 'react';
 import {Layout, Menu, Breadcrumb, Icon} from 'antd';
 import PlayerList from "./containers/PlayerList";
 import {Link, Redirect, Route, Switch} from "react-router-dom";
+import PlayerPage from "./containers/PlayerPage";
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
@@ -60,6 +61,7 @@ const MainLayout = () => (
                 <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
                     <Switch>
                         <Route path="/players" component={PlayerList} />
+                        <Route path="/player/:id" component={PlayerPage} />
                     </Switch>
                 </div>
             </Content>

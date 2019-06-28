@@ -1,7 +1,8 @@
 import React from "react";
 import {Button, Input, Table} from "antd";
-import Column from "antd/es/table/Column";
-import Search from "antd/es/input/Search";
+import {Link} from "react-router-dom";
+
+const { Column } = Table;
 
 export default class PlayerList extends React.Component {
     constructor(props) {
@@ -12,16 +13,17 @@ export default class PlayerList extends React.Component {
         return (
             <div>
                 <div>
-                    <Search onChange={() => alert('sea')} />
+                    <Input onPressEnter={(event) => this.props.fetchPlayerList(event.target.value)}
+                        placeholder="Enter name, id or guid of the player and press enter"/>
                 </div>
                 <Table dataSource={this.props.playerList} rowKey="id">
-                    <Column title="ID" dataIndex="id" key="id"/>
-                    <Column title="Name" dataIndex="name" key="name"/>
-                    <Column title="GUID" dataIndex="uniqueId" key="uniqueId"/>
-                    <Column title="Faction" dataIndex="faction.name" key="faction.name"/>
-                    <Column title="Troop" dataIndex="troop.name" key="troop.name"/>
-                    <Column title="Gold" dataIndex="gold" key="gold"/>
-                    <Column dataIndex="id" key="id" render={(id) => <Button>Manage</Button>} />
+                    <Column title="ID" dataIndex="id" key="id" />
+                    <Column title="Name" dataIndex="name" key="name" />
+                    <Column title="GUID" dataIndex="uniqueId" key="guid" />
+                    <Column title="Faction" dataIndex="faction.name" key="faction" />
+                    <Column title="Troop" dataIndex="troop.name" key="troop" />
+                    <Column title="Gold" dataIndex="gold" key="gold" />
+                    <Column dataIndex="id" render={(id) => <Link to={'/player/' + id}>Manage {id}</Link>} key="manage" />
                 </Table>
             </div>
         );

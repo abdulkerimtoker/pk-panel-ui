@@ -7,9 +7,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetchPlayerList: filterData => {
-        dispatch(fetchPlayerList(filterData));
-        fetch('/api/player')
+    fetchPlayerList: search => {
+        dispatch(fetchPlayerList(search));
+        fetch('/api/player/search?search=' + search)
             .then(resp => resp.json())
             .then(playerList => dispatch(updatePlayerList(playerList)));
     }
