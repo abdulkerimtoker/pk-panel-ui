@@ -61,7 +61,7 @@ const MainLayout = () => (
                 <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
                     <Switch>
                         <Route path="/players" component={PlayerList} />
-                        <Route path="/player/:id" component={PlayerPage} />
+                        <Route path="/player/:id/:tab?" component={PlayerPage} />
                     </Switch>
                 </div>
             </Content>
