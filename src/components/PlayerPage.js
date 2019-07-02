@@ -66,6 +66,10 @@ export class PlayerPage extends React.Component {
         }
     }
 
+    handleInventorySlotChange() {
+
+    }
+
     render() {
         return (
             this.props.player ?
@@ -74,18 +78,24 @@ export class PlayerPage extends React.Component {
                           onChange={this.handleTabChange}>
                         <TabPane tab="Character" key="character">
                             <h3>{this.props.player.name}</h3>
-                            <PlayerField type="text" player={this.props.player} field="name" title="Name" onChange={this.handleFieldChange} />
-                            <PlayerField type="number" player={this.props.player} field="uniqueId" title="GUID" onChange={this.handleFieldChange} />
-                            <PlayerField type="number" player={this.props.player} field="gold" title="Gold" onChange={this.handleFieldChange} />
-                            <PlayerField type="number" player={this.props.player} field="hp" title="Health" onChange={this.handleFieldChange} />
-                            <PlayerField type="number" player={this.props.player} field="food" title="Food" onChange={this.handleFieldChange} />
-                            <PlayerField type="troop" player={this.props.player} field="troop" title="Troop" onChange={this.handleFieldChange} troopList={this.props.troopList} />
-                            <PlayerField type="troop" player={this.props.player} field="faction" title="Faction" onChange={this.handleFieldChange} troopList={this.props.factionList} />
+                            <PlayerField type="text" object={this.props.player} field="name" title="Name" onChange={this.handleFieldChange} />
+                            <PlayerField type="number" object={this.props.player} field="uniqueId" title="GUID" onChange={this.handleFieldChange} />
+                            <PlayerField type="number" object={this.props.player} field="gold" title="Gold" onChange={this.handleFieldChange} />
+                            <PlayerField type="number" object={this.props.player} field="hp" title="Health" onChange={this.handleFieldChange} />
+                            <PlayerField type="number" object={this.props.player} field="food" title="Food" onChange={this.handleFieldChange} />
+                            <PlayerField type="troop" object={this.props.player} field="troop" title="Troop" onChange={this.handleFieldChange} troopList={this.props.troopList} />
+                            <PlayerField type="troop" object={this.props.player} field="faction" title="Faction" onChange={this.handleFieldChange} troopList={this.props.factionList} />
                             <Button onClick={() => this.props.updatePlayer(this.props.player)}>Save</Button>
                             <Redirect to={'/player/' + this.props.match.params.id + '/character'} />
                         </TabPane>
                         <TabPane tab="Inventory" key="inventory">
-                            Content of Tab Pane 2
+                            {this.props.inventory ? (
+                                <div>
+                                    {this.inventory.slots.map(slot => (
+                                        <PlayerField type="troop" player={slot} field="item" title={'Slot ' + slot.slot} />
+                                    ))}
+                                </div>
+                            ) : null}
                         </TabPane>
                         <TabPane tab="Door Keys" key="doorkeys">
                             Content of Tab Pane 3
@@ -112,20 +122,20 @@ class PlayerField extends React.Component {
     }
 
     handleChange = (event) => {
-        let player = Object.assign({}, this.props.player);
+        let object = Object.assign({}, this.props.object);
         switch (this.props.type) {
             case fieldTypes.text:
-                player[this.props.field] = event.target.value;
+                object[this.props.field] = event.target.value;
                 break;
             case fieldTypes.number:
-                player[this.props.field] = parseInt(event.target.value);
+                object[this.props.field] = parseInt(event.target.value);
                 break;
             case fieldTypes.troop:
                 let selectedTroop = this.props.troopList.filter((troop) => troop.id.toString() === event.toString())[0];
-                player[this.props.field] = selectedTroop;
+                object[this.props.field] = selectedTroop;
                 break;
         }
-        this.props.onChange(player);
+        this.props.onChange(object);
     };
 
     render() {
@@ -133,14 +143,14 @@ class PlayerField extends React.Component {
 
         switch (this.props.type) {
             case fieldTypes.text:
-                inputField = <Input type="text" value={this.props.player[this.props.field]} onChange={this.handleChange} />;
+                inputField = <Input type="text" value={this.props.object[this.props.field]} onChange={this.handleChange} />;
                 break;
             case fieldTypes.number:
-                inputField = <Input type="number" value={this.props.player[this.props.field].toString()} onChange={this.handleChange} />;
+                inputField = <Input type="number" value={this.props.object[this.props.field].toString()} onChange={this.handleChange} />;
                 break;
             case fieldTypes.troop:
                 inputField = (
-                    <Select value={this.props.player[this.props.field].id.toString()} onChange={this.handleChange}>
+                    <Select value={this.props.object[this.props.field].id.toString()} onChange={this.handleChange}>
                         {
                             this.props.troopList.map((troop) => (
                                 <Option value={troop.id.toString()} key={troop.id.toString()}>
