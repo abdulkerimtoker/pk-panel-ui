@@ -20,7 +20,7 @@ export const inventory = (state = null, action) => {
     return state;
 };
 
-export const troopList = (state = [], action) => {
+export const troopList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_TROOP_LIST:
             return action.troopList;
@@ -28,7 +28,7 @@ export const troopList = (state = [], action) => {
     return state;
 };
 
-export const factionList = (state = [], action) => {
+export const factionList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_FACTION_LIST:
             return action.factionList;
@@ -36,7 +36,7 @@ export const factionList = (state = [], action) => {
     return state;
 };
 
-export const itemList = (state = [], action) => {
+export const itemList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_ITEM_LIST:
             return action.itemList;

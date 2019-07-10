@@ -3,6 +3,8 @@ export const PlayerPageActions = {
     RECEIVE_PLAYER: 'RESPONSE_PLAYER',
     UPDATE_PLAYER: 'REQUEST_UPDATE_PLAYER',
     UPDATE_PLAYER_SUCCESS: 'RESPONSE_PLAYER_UPDATED',
+    UPDATE_INVENTORY_SLOT: 'REQUEST_UPDATE_INVENTORY_SLOT',
+    UPDATE_INVENTORY_SLOT_SUCCESS: 'RESPONSE_UPDATE_INVENTORY_SLOT',
 
     SET_PLAYER: 'SET_PLAYER',
 
@@ -78,4 +80,14 @@ export const receiveFactionList = factionList => ({
 export const receiveItemList = itemList => ({
     type: PlayerPageActions.RECEIVE_ITEM_LIST,
     itemList: itemList
+});
+
+export const updateInventorySlot = inventorySlot => ({
+    type: PlayerPageActions.UPDATE_INVENTORY_SLOT,
+    inventorySlot: inventorySlot
+});
+
+export const updateInventorySlotSuccess = inventorySlot => ({
+    type: PlayerPageActions.UPDATE_INVENTORY_SLOT_SUCCESS,
+    inventorySlot: inventorySlot
 });

@@ -3,7 +3,7 @@ import {
     fetchPlayer, fetchPlayerInventory,
     fetchTroopList, receiveFactionList, receiveItemList,
     receivePlayer, receivePlayerInventory,
-    receiveTroopList, setPlayer,
+    receiveTroopList, setPlayer, updateInventorySlot, updateInventorySlotSuccess,
     updatePlayer,
     updatePlayerSuccess
 } from "../actions/playerPage";
@@ -37,6 +37,20 @@ const mapDispatchToProps = dispatch => ({
         })
             .then(resp => resp.json())
             .then(updatedPlayer => updatePlayerSuccess(updatedPlayer));
+    },
+
+    updateInventorySlot: (inventoryId, inventorySlot) => {
+        inventorySlot['inventory'] = {id: inventoryId};
+        dispatch(updateInventorySlot(inventorySlot));
+        fetch('/api/player/inventory/' + inventoryId + '/slot', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inventorySlot)
+        })
+            .then(resp => resp.json())
+            .then(updatedSlot => updateInventorySlotSuccess(updatedSlot));
     },
 
     setPlayer: player => {
