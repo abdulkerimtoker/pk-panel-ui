@@ -87,8 +87,8 @@ export class PlayerPage extends React.Component {
                             <PlayerField type="number" object={this.props.player} field="gold" title="Gold" onChange={this.handleFieldChange} key="gold" />
                             <PlayerField type="number" object={this.props.player} field="hp" title="Health" onChange={this.handleFieldChange} key="hp" />
                             <PlayerField type="number" object={this.props.player} field="food" title="Food" onChange={this.handleFieldChange} key="food" />
-                            <PlayerField type="troop" object={this.props.player} field="troop" title="Troop" onChange={this.handleFieldChange} troopList={this.props.troopList} key="troop" />
-                            <PlayerField type="troop" object={this.props.player} field="faction" title="Faction" onChange={this.handleFieldChange} troopList={this.props.factionList} key="faction" />
+                            <PlayerField type="troop" object={this.props.player} field="troop" title="Troop" onChange={this.handleFieldChange} objectList={this.props.troopList} key="troop" />
+                            <PlayerField type="troop" object={this.props.player} field="faction" title="Faction" onChange={this.handleFieldChange} objectList={this.props.factionList} key="faction" />
                             <Button onClick={() => this.props.updatePlayer(this.props.player)}>Save</Button>
                             <Redirect to={'/player/' + this.props.match.params.id + '/character'} />
                         </TabPane>
@@ -96,8 +96,8 @@ export class PlayerPage extends React.Component {
                             {this.props.inventory ? (
                                 <div>
                                     {this.props.inventory.slots.map(slot => (
-                                        <PlayerField type="troop" object={slot} field="item" title={'Slot ' + slot.slot} onChange={this.handleInventorySlotChange}
-                                                troopList={this.props.itemList} key={slot.slot.toString()} />
+                                        <PlayerField type="item" object={slot} field="item" title={'Slot ' + slot.slot} onChange={this.handleInventorySlotChange}
+                                                objectList={this.props.itemList} key={slot.slot.toString()} />
                                     ))}
                                 </div>
                             ) : null}
@@ -124,6 +124,7 @@ class PlayerField extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     handleChange = (event) => {
@@ -136,11 +137,27 @@ class PlayerField extends React.Component {
                 object[this.props.field] = parseInt(event.target.value);
                 break;
             case fieldTypes.troop:
-                let selectedTroop = this.props.troopList.filter((troop) => troop.id.toString() === event.toString())[0];
+                let selectedTroop = this.props.objectList.filter((troop) => troop.id.toString() === event.toString())[0];
                 object[this.props.field] = selectedTroop;
+                break;
+            case fieldTypes.item:
+                let selectedItem = this.props.objectList.filter((troop) => troop.id.toString() === event.toString())[0];
+                object[this.props.field] = selectedItem;
+                this.setState({filteredItems: null});
                 break;
         }
         this.props.onChange(object);
+    };
+
+    onItemSearch = (searchTerm) => {
+        if (searchTerm && searchTerm !== '') {
+            let filteredItems = this.props.objectList.filter(item =>
+                item.id.toString().includes(searchTerm) || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            this.setState({filteredItems: filteredItems});
+        } else {
+            this.setState({filteredItems: null});
+        }
     };
 
     render() {
@@ -155,9 +172,10 @@ class PlayerField extends React.Component {
                 break;
             case fieldTypes.troop:
                 inputField = (
-                    <Select value={this.props.object[this.props.field].id.toString()} onChange={this.handleChange}>
-                        {this.props.troopList ? (
-                            this.props.troopList.map((troop) => (
+                    <Select value={this.props.object[this.props.field].id.toString()}
+                            onChange={this.handleChange}>
+                        {this.props.objectList ? (
+                            this.props.objectList.map((troop) => (
                                 <Option value={troop.id.toString()} key={troop.id.toString()}>
                                     {troop.id + ' - ' + troop.name}
                                 </Option>
@@ -166,10 +184,28 @@ class PlayerField extends React.Component {
                     </Select>
                 );
                 break;
+            case fieldTypes.item:
+                inputField = (
+                    <Select showSearch showArrow={false} filterOption={false} value={this.props.object[this.props.field].id.toString()}
+                            onSelect={this.handleChange} onSearch={this.onItemSearch} style={{width: '100%'}} notFoundContent="No Match">
+                        {this.state.filteredItems ? (
+                            this.state.filteredItems.map((item) => (
+                                <Option value={item.id.toString()} key={item.id.toString()}>
+                                    {item.id + ' - ' + item.name}
+                                </Option>
+                            ))
+                        ) : (
+                            <Option value={this.props.object[this.props.field].id.toString()}>
+                                {this.props.object[this.props.field].id + ' - ' + this.props.object[this.props.field].name}
+                            </Option>
+                        )}
+                    </Select>
+                );
+                break;
         }
 
         return (
-            <Row>
+            <Row style={{marginBottom: 10}}>
                 <Col span={4}>
                     <label>{this.props.title}:</label>
                 </Col>

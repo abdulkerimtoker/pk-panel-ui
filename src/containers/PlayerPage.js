@@ -9,6 +9,7 @@ import {
 } from "../actions/playerPage";
 import {connect} from "react-redux";
 import {PlayerPage} from "../components/PlayerPage";
+import {message} from "antd";
 
 const mapStateToProps = state => ({
     player: state.player,
@@ -35,6 +36,12 @@ const mapDispatchToProps = dispatch => ({
             },
             body: JSON.stringify(player)
         })
+            .then(resp => {
+                if (resp.status === 200) message.success('Changes were saved successfully');
+                else if (resp.status === 409) message.error('A change was made while you were editing this player. Refresh.');
+                else message.error('An error occured while trying to save the changes');
+                return resp;
+            })
             .then(resp => resp.json())
             .then(updatedPlayer => updatePlayerSuccess(updatedPlayer));
     },
@@ -49,8 +56,11 @@ const mapDispatchToProps = dispatch => ({
             },
             body: JSON.stringify(inventorySlot)
         })
-            .then(resp => resp.json())
-            .then(updatedSlot => updateInventorySlotSuccess(updatedSlot));
+            .then(resp => {
+                if (resp.status === 200) message.success('Slot successfully updated');
+                else message.error('An error occured while trying to update the inventory slot');
+            })
+            .catch(() => message.error('An error occured while trying to update the inventory slot'));
     },
 
     setPlayer: player => {
