@@ -1,8 +1,10 @@
 export const PlayerPageActions = {
     FETCH_PLAYER: 'REQUEST_PLAYER',
     RECEIVE_PLAYER: 'RESPONSE_PLAYER',
+
     UPDATE_PLAYER: 'REQUEST_UPDATE_PLAYER',
     UPDATE_PLAYER_SUCCESS: 'RESPONSE_PLAYER_UPDATED',
+
     UPDATE_INVENTORY_SLOT: 'REQUEST_UPDATE_INVENTORY_SLOT',
     UPDATE_INVENTORY_SLOT_SUCCESS: 'RESPONSE_UPDATE_INVENTORY_SLOT',
 
@@ -11,6 +13,9 @@ export const PlayerPageActions = {
     FETCH_PLAYER_INVENTORY: 'REQUEST_PLAYER_INVENTORY',
     RECEIVE_PLAYER_INVENTORY: 'RESPONSE_PLAYER_INVENTORY',
 
+    FETCH_PLAYER_DOOR_KEYS: 'REQUEST_PLAYER_DOOR_KEYS',
+    RECEIVE_PLAYER_DOOR_KEYS: 'RESPONSE_PLAYER_DOOR_KEYS',
+
     FETCH_TROOP_LIST: 'REQUEST_TROOP_LIST',
     RECEIVE_TROOP_LIST: 'RESPONSE_TROOP_LIST',
 
@@ -18,7 +23,10 @@ export const PlayerPageActions = {
     RECEIVE_FACTION_LIST: 'RESPONSE_FACTION_LIST',
 
     FETCH_ITEM_LIST: 'REQUEST_ITEM_LIST',
-    RECEIVE_ITEM_LIST: 'RESPONSE_ITEM_LIST'
+    RECEIVE_ITEM_LIST: 'RESPONSE_ITEM_LIST',
+
+    FETCH_DOOR_LIST: 'REQUEST_DOOR_LIST',
+    RECEIVE_DOOR_LIST: 'RESPONSE_DOOR_LIST'
 };
 
 export const fetchPlayer = id => ({
@@ -55,6 +63,16 @@ export const receivePlayerInventory = inventory => ({
     inventory: inventory
 });
 
+export const fetchPlayerDoorKeys = id => ({
+    type: PlayerPageActions.FETCH_PLAYER_DOOR_KEYS,
+    id: id
+});
+
+export const receivePlayerDoorKeys = doorKeys => ({
+    type: PlayerPageActions.RECEIVE_PLAYER_DOOR_KEYS,
+    doorKeys: doorKeys
+});
+
 export const fetchTroopList = () => ({
     type: PlayerPageActions.FETCH_TROOP_LIST
 });
@@ -65,6 +83,10 @@ export const fetchFactionList = () => ({
 
 export const fetchItemList = () => ({
     type: PlayerPageActions.FETCH_ITEM_LIST
+});
+
+export const fetchDoorList = () => ({
+    type: PlayerPageActions.FETCH_DOOR_LIST
 });
 
 export const receiveTroopList = troopList => ({
@@ -80,6 +102,11 @@ export const receiveFactionList = factionList => ({
 export const receiveItemList = itemList => ({
     type: PlayerPageActions.RECEIVE_ITEM_LIST,
     itemList: itemList
+});
+
+export const receiveDoorList = doorList => ({
+    type: PlayerPageActions.RECEIVE_DOOR_LIST,
+    doorList: doorList
 });
 
 export const updateInventorySlot = inventorySlot => ({

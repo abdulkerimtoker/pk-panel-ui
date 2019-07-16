@@ -20,6 +20,14 @@ export const inventory = (state = null, action) => {
     return state;
 };
 
+export const doorKeys = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_PLAYER_DOOR_KEYS:
+            return action.doorKeys;
+    }
+    return state;
+};
+
 export const troopList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_TROOP_LIST:
@@ -40,6 +48,14 @@ export const itemList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_ITEM_LIST:
             return action.itemList;
+    }
+    return state;
+};
+
+export const doorList = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_DOOR_LIST:
+            return action.doorList;
     }
     return state;
 };

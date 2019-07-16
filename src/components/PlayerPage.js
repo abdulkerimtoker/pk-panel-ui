@@ -45,6 +45,9 @@ export class PlayerPage extends React.Component {
                     case 'inventory':
                         this.props.fetchInventory(playerId);
                         break;
+                    case 'doorKeys':
+                        this.props.fetchDoorKeys(playerId);
+                        break;
                     case 'troopList':
                         this.props.fetchTroopList();
                         break;
@@ -53,6 +56,9 @@ export class PlayerPage extends React.Component {
                         break;
                     case 'itemList':
                         this.props.fetchItemList();
+                        break;
+                    case 'doorList':
+                        this.props.fetchDoorList();
                         break;
                 }
             }
@@ -66,6 +72,9 @@ export class PlayerPage extends React.Component {
                 break;
             case 'inventory':
                 this.loadDataIfNotExists(['inventory', 'itemList']);
+                break;
+            case 'doorKeys':
+                this.loadDataIfNotExists(['doorKeys', 'doorList']);
                 break;
         }
     }
@@ -103,7 +112,14 @@ export class PlayerPage extends React.Component {
                             ) : null}
                         </TabPane>
                         <TabPane tab="Door Keys" key="doorkeys">
-                            Content of Tab Pane 3
+                            {this.props.doorKeys ? (
+                                <div>
+                                    {this.props.doorKeys.map(doorKey => (
+                                        <PlayerField type="doorKey" object={doorKey} field="door" title={'ID: ' + doorKey.id} onChange={}
+                                                     objectList={this.props.doorKeys} key={doorKey.id.toString()} />
+                                    ))}
+                                </div>
+                            ) : null}
                         </TabPane>
                     </Tabs>
                 </div>
@@ -117,7 +133,8 @@ const fieldTypes = {
     number: 'number',
     troop: 'troop',
     faction: 'faction',
-    item: 'item'
+    item: 'item',
+    doorKey: 'doorKey'
 };
 
 class PlayerField extends React.Component {
@@ -160,6 +177,17 @@ class PlayerField extends React.Component {
         }
     };
 
+    onDoorSearch = (searchTerm) => {
+        if (searchTerm && searchTerm !== '') {
+            let filteredDoors = this.props.objectList.filter(door =>
+                door.id.toString().includes(searchTerm) || door.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            this.setState({filteredDoors: filteredDoors});
+        } else {
+            this.setState({filteredDoors: null});
+        }
+    };
+
     render() {
         let inputField;
 
@@ -192,6 +220,24 @@ class PlayerField extends React.Component {
                             this.state.filteredItems.map((item) => (
                                 <Option value={item.id.toString()} key={item.id.toString()}>
                                     {item.id + ' - ' + item.name}
+                                </Option>
+                            ))
+                        ) : (
+                            <Option value={this.props.object[this.props.field].id.toString()}>
+                                {this.props.object[this.props.field].id + ' - ' + this.props.object[this.props.field].name}
+                            </Option>
+                        )}
+                    </Select>
+                );
+                break;
+            case fieldTypes.doorKey:
+                inputField = (
+                    <Select showSearch showArrow={false} filterOption={false} value={this.props.object[this.props.field].id.toString()}
+                            onSelect={this.handleChange} onSearch={this.onDoorSearch} style={{width: '100%'}} notFoundContent="No Match">
+                        {this.state.filteredDoors ? (
+                            this.state.filteredDoors.map((door) => (
+                                <Option value={door.id.toString()} key={door.id.toString()}>
+                                    {door.id + ' - ' + door.name}
                                 </Option>
                             ))
                         ) : (

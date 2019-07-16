@@ -1,8 +1,8 @@
 import {
     fetchFactionList, fetchItemList,
-    fetchPlayer, fetchPlayerInventory,
-    fetchTroopList, receiveFactionList, receiveItemList,
-    receivePlayer, receivePlayerInventory,
+    fetchPlayer, fetchPlayerDoorKeys, fetchPlayerInventory,
+    fetchTroopList, receiveDoorList, receiveFactionList, receiveItemList,
+    receivePlayer, receivePlayerDoorKeys, receivePlayerInventory,
     receiveTroopList, setPlayer, updateInventorySlot, updateInventorySlotSuccess,
     updatePlayer,
     updatePlayerSuccess
@@ -16,7 +16,9 @@ const mapStateToProps = state => ({
     troopList: state.troopList,
     factionList: state.factionList,
     itemList: state.itemList,
-    inventory: state.inventory
+    doorList: state.doorList,
+    inventory: state.inventory,
+    doorKeys: state.doorKeys
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -88,12 +90,26 @@ const mapDispatchToProps = dispatch => ({
             .then(itemList => dispatch(receiveItemList(itemList)));
     },
 
+    fetchDoorList: () => {
+        dispatch(fetchDoorList());
+        fetch('/api/door')
+            .then(resp => resp.json())
+            .then(doorList => dispatch(receiveDoorList(doorList)));
+    },
+
     fetchInventory: (id) => {
         dispatch(fetchPlayerInventory(id));
         fetch('/api/player/' + id + '/inventory')
             .then(resp => resp.json())
             .then(inventory => dispatch(receivePlayerInventory(inventory)));
     },
+
+    fetchDoorKeys: (id) => {
+        dispatch(fetchPlayerDoorKeys(id));
+        fetch('/api/player/' + id + '/doorKeys')
+            .then(resp => resp.json())
+            .then(doorKeys => dispatch(receivePlayerDoorKeys(doorKeys)));
+    }
 });
 
 export default connect(
