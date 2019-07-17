@@ -1,4 +1,5 @@
 import {
+    fetchDoorList,
     fetchFactionList, fetchItemList,
     fetchPlayer, fetchPlayerDoorKeys, fetchPlayerInventory,
     fetchTroopList, receiveDoorList, receiveFactionList, receiveItemList,

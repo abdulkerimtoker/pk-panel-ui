@@ -16,6 +16,9 @@ export const PlayerPageActions = {
     FETCH_PLAYER_DOOR_KEYS: 'REQUEST_PLAYER_DOOR_KEYS',
     RECEIVE_PLAYER_DOOR_KEYS: 'RESPONSE_PLAYER_DOOR_KEYS',
 
+    SAVE_PLAYER_DOOR_KEY: 'REQUEST_SAVE_PLAYER_DOOR_KEY',
+    SAVE_PLAYER_DOOR_KEY_SUCCESS: 'RESPONSE_SAVE_PLAYER_DOOR_KEY',
+
     FETCH_TROOP_LIST: 'REQUEST_TROOP_LIST',
     RECEIVE_TROOP_LIST: 'RESPONSE_TROOP_LIST',
 
@@ -115,6 +118,11 @@ export const updateInventorySlot = inventorySlot => ({
 });
 
 export const updateInventorySlotSuccess = inventorySlot => ({
+    type: PlayerPageActions.UPDATE_INVENTORY_SLOT_SUCCESS,
+    inventorySlot: inventorySlot
+});
+
+export const savePlayerDoorKey = doorKey => ({
     type: PlayerPageActions.UPDATE_INVENTORY_SLOT_SUCCESS,
     inventorySlot: inventorySlot
 });

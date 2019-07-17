@@ -73,7 +73,7 @@ export class PlayerPage extends React.Component {
             case 'inventory':
                 this.loadDataIfNotExists(['inventory', 'itemList']);
                 break;
-            case 'doorKeys':
+            case 'doorkeys':
                 this.loadDataIfNotExists(['doorKeys', 'doorList']);
                 break;
         }
@@ -88,7 +88,7 @@ export class PlayerPage extends React.Component {
             this.props.player ?
                 <div>
                     <h3>{this.props.player.name}</h3>
-                    <Tabs defaultActiveKey={this.props.match.params.tab ? this.props.match.params.tab : 'character'}
+                    <Tabs activeKey={this.props.match.params.tab ? this.props.match.params.tab : 'character'}
                           onChange={this.handleTabChange}>
                         <TabPane tab="Character" key="character">
                             <PlayerField type="text" object={this.props.player} field="name" title="Name" onChange={this.handleFieldChange} key="name" />
@@ -115,8 +115,8 @@ export class PlayerPage extends React.Component {
                             {this.props.doorKeys ? (
                                 <div>
                                     {this.props.doorKeys.map(doorKey => (
-                                        <PlayerField type="doorKey" object={doorKey} field="door" title={'ID: ' + doorKey.id} onChange={}
-                                                     objectList={this.props.doorKeys} key={doorKey.id.toString()} />
+                                        <PlayerField type="doorKey" object={doorKey} field="door" title={'ID: ' + doorKey.id}
+                                                     objectList={this.props.doorList} key={doorKey.id.toString()} />
                                     ))}
                                 </div>
                             ) : null}
@@ -161,6 +161,11 @@ class PlayerField extends React.Component {
                 let selectedItem = this.props.objectList.filter((troop) => troop.id.toString() === event.toString())[0];
                 object[this.props.field] = selectedItem;
                 this.setState({filteredItems: null});
+                break;
+            case fieldTypes.doorKey:
+                let selectedDoor = this.props.objectList.filter((door) => door.id.toString() === event.toString())[0];
+                object[this.props.field] = selectedDoor;
+                this.setState({filteredDoors: null});
                 break;
         }
         this.props.onChange(object);
