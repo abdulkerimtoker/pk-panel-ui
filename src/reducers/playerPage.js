@@ -16,6 +16,12 @@ export const inventory = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_PLAYER_INVENTORY:
             return action.inventory;
+        case PlayerPageActions.UPDATE_INVENTORY_SLOT_SUCCESS:
+            return Object.assign({}, state, {
+                slots: state.slots.map(slot => slot.slot === action.inventorySlot.slot
+                    && slot.item.id !== action.inventorySlot.item.id
+                    ? action.inventorySlot : slot)
+            });
     }
     return state;
 };
@@ -24,6 +30,10 @@ export const doorKeys = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_PLAYER_DOOR_KEYS:
             return action.doorKeys;
+        case PlayerPageActions.SAVE_PLAYER_DOOR_KEY_SUCCESS:
+            return state.map(doorKey => doorKey.door.id !== action.doorKey.door.id
+                && doorKey.id === action.doorKey.id
+                ? action.doorKey : doorKey);
     }
     return state;
 };

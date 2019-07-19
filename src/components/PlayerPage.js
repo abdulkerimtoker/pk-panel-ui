@@ -79,8 +79,12 @@ export class PlayerPage extends React.Component {
         }
     }
 
-    handleInventorySlotChange = (updatedSlot) => {
+    handleInventorySlotChange = updatedSlot => {
         this.props.updateInventorySlot(this.props.inventory.id, updatedSlot);
+    };
+
+    handleDoorKeyChange = doorKey => {
+        this.props.saveDoorKey(this.props.player.id, doorKey);
     };
 
     render() {
@@ -115,7 +119,7 @@ export class PlayerPage extends React.Component {
                             {this.props.doorKeys ? (
                                 <div>
                                     {this.props.doorKeys.map(doorKey => (
-                                        <PlayerField type="doorKey" object={doorKey} field="door" title={'ID: ' + doorKey.id}
+                                        <PlayerField type="doorKey" object={doorKey} field="door" title={'ID: ' + doorKey.id} onChange={this.handleDoorKeyChange}
                                                      objectList={this.props.doorList} key={doorKey.id.toString()} />
                                     ))}
                                 </div>

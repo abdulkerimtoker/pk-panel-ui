@@ -1,10 +1,23 @@
 import {
     fetchDoorList,
-    fetchFactionList, fetchItemList,
-    fetchPlayer, fetchPlayerDoorKeys, fetchPlayerInventory,
-    fetchTroopList, receiveDoorList, receiveFactionList, receiveItemList,
-    receivePlayer, receivePlayerDoorKeys, receivePlayerInventory,
-    receiveTroopList, setPlayer, updateInventorySlot, updateInventorySlotSuccess,
+    fetchFactionList,
+    fetchItemList,
+    fetchPlayer,
+    fetchPlayerDoorKeys,
+    fetchPlayerInventory,
+    fetchTroopList,
+    receiveDoorList,
+    receiveFactionList,
+    receiveItemList,
+    receivePlayer,
+    receivePlayerDoorKeys,
+    receivePlayerInventory,
+    receiveTroopList,
+    savePlayerDoorKey,
+    savePlayerDoorKeySuccess,
+    setPlayer,
+    updateInventorySlot,
+    updateInventorySlotSuccess,
     updatePlayer,
     updatePlayerSuccess
 } from "../actions/playerPage";
@@ -30,6 +43,10 @@ const mapDispatchToProps = dispatch => ({
             .then(player => dispatch(receivePlayer(player)));
     },
 
+    setPlayer: player => {
+        dispatch(setPlayer(player));
+    },
+
     updatePlayer: player => {
         dispatch(updatePlayer());
         fetch('/api/player', {
@@ -46,13 +63,13 @@ const mapDispatchToProps = dispatch => ({
                 return resp;
             })
             .then(resp => resp.json())
-            .then(updatedPlayer => updatePlayerSuccess(updatedPlayer));
+            .then(updatedPlayer => dispatch(updatePlayerSuccess(updatedPlayer)));
     },
 
     updateInventorySlot: (inventoryId, inventorySlot) => {
         inventorySlot['inventory'] = {id: inventoryId};
         dispatch(updateInventorySlot(inventorySlot));
-        fetch('/api/player/inventory/' + inventoryId + '/slot', {
+        fetch('/api/player/inventory/slot', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,12 +79,29 @@ const mapDispatchToProps = dispatch => ({
             .then(resp => {
                 if (resp.status === 200) message.success('Slot successfully updated');
                 else message.error('An error occured while trying to update the inventory slot');
+                return resp.json();
             })
+            .then(inventorySlot => dispatch(updateInventorySlotSuccess(inventorySlot)))
             .catch(() => message.error('An error occured while trying to update the inventory slot'));
     },
 
-    setPlayer: player => {
-        dispatch(setPlayer(player));
+    saveDoorKey: (playerId, doorKey) => {
+        doorKey['player'] = {id: playerId};
+        dispatch(savePlayerDoorKey(doorKey));
+        fetch('/api/doorKey', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(doorKey)
+        })
+            .then(resp => {
+                if (resp.status === 200) message.success('Door key successfully saved');
+                else message.error('An error occured while trying to save the door key');
+                return resp.json();
+            })
+            .then(doorKey => dispatch(savePlayerDoorKeySuccess(doorKey)))
+            .catch(() => message.error('An error occured while trying to save the door key'));
     },
 
     fetchTroopList: () => {

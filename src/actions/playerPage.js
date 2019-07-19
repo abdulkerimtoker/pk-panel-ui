@@ -123,6 +123,11 @@ export const updateInventorySlotSuccess = inventorySlot => ({
 });
 
 export const savePlayerDoorKey = doorKey => ({
-    type: PlayerPageActions.UPDATE_INVENTORY_SLOT_SUCCESS,
-    inventorySlot: inventorySlot
+    type: PlayerPageActions.SAVE_PLAYER_DOOR_KEY,
+    doorKey: doorKey
+});
+
+export const savePlayerDoorKeySuccess = doorKey => ({
+    type: PlayerPageActions.SAVE_PLAYER_DOOR_KEY_SUCCESS,
+    doorKey: doorKey
 });
