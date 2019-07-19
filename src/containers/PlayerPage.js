@@ -88,7 +88,7 @@ const mapDispatchToProps = dispatch => ({
     saveDoorKey: (playerId, doorKey) => {
         doorKey['player'] = {id: playerId};
         dispatch(savePlayerDoorKey(doorKey));
-        fetch('/api/doorKey', {
+        fetch('/api/player/doorKey', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
