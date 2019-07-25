@@ -1,15 +1,16 @@
 import {
+    fetchBoardList,
     fetchDoorList,
     fetchFactionList,
     fetchItemList,
-    fetchPlayer,
+    fetchPlayer, fetchPlayerBoardAccesses,
     fetchPlayerDoorKeys,
     fetchPlayerInventory,
-    fetchTroopList,
+    fetchTroopList, receiveBoardList,
     receiveDoorList,
     receiveFactionList,
     receiveItemList,
-    receivePlayer,
+    receivePlayer, receivePlayerBoardAccesses,
     receivePlayerDoorKeys,
     receivePlayerInventory,
     receiveTroopList,
@@ -32,7 +33,9 @@ const mapStateToProps = state => ({
     itemList: state.itemList,
     doorList: state.doorList,
     inventory: state.inventory,
-    doorKeys: state.doorKeys
+    doorKeys: state.doorKeys,
+    boardList: state.boardList,
+    boardAccesses: state.boardAccesses
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -132,6 +135,13 @@ const mapDispatchToProps = dispatch => ({
             .then(doorList => dispatch(receiveDoorList(doorList)));
     },
 
+    fetchBoardList: () => {
+        dispatch(fetchBoardList());
+        fetch('/api/board')
+            .then(resp => resp.json())
+            .then(boardList => dispatch(receiveBoardList(boardList)));
+    },
+
     fetchInventory: (id) => {
         dispatch(fetchPlayerInventory(id));
         fetch('/api/player/' + id + '/inventory')
@@ -144,6 +154,13 @@ const mapDispatchToProps = dispatch => ({
         fetch('/api/player/' + id + '/doorKeys')
             .then(resp => resp.json())
             .then(doorKeys => dispatch(receivePlayerDoorKeys(doorKeys)));
+    },
+
+    fetchBoardAccesses: (id) => {
+        dispatch(fetchPlayerBoardAccesses(id));
+        fetch('/api/player/' + id + '/boardAccesses')
+            .then(resp => resp.json())
+            .then(boardAccesses => dispatch(receivePlayerBoardAccesses(boardAccesses)));
     }
 });
 

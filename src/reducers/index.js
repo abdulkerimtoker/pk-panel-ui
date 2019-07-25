@@ -1,6 +1,16 @@
 import {combineReducers} from "redux";
 import { playerList } from "./playerList"
-import {doorKeys, doorList, factionList, inventory, itemList, player, troopList} from "./playerPage";
+import {
+    boardAccesses,
+    boardList,
+    doorKeys,
+    doorList,
+    factionList,
+    inventory,
+    itemList,
+    player,
+    troopList
+} from "./playerPage";
 
 export default combineReducers({
     playerList,
@@ -10,5 +20,7 @@ export default combineReducers({
     itemList,
     inventory,
     doorList,
-    doorKeys
+    doorKeys,
+    boardList,
+    boardAccesses
 });

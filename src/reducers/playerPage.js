@@ -38,6 +38,14 @@ export const doorKeys = (state = null, action) => {
     return state;
 };
 
+export const boardAccesses = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_PLAYER_BOARD_ACCESSES:
+            return action.boardAccesses;
+    }
+    return state;
+};
+
 export const troopList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_TROOP_LIST:
@@ -66,6 +74,14 @@ export const doorList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_DOOR_LIST:
             return action.doorList;
+    }
+    return state;
+};
+
+export const boardList = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_BOARD_LIST:
+            return action.boardList;
     }
     return state;
 };
