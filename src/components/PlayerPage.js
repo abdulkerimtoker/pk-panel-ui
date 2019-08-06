@@ -1,15 +1,11 @@
 import React from "react";
-import {Button, Col, Input, Row, Select, Tabs} from "antd";
+import {Button, Tabs} from "antd";
 import {Redirect} from "react-router-dom";
 import PlayerField from "./PlayerField";
 
 const { TabPane } = Tabs;
 
 export class PlayerPage extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentWillMount() {
         let playerId = this.props.match.params.id;
@@ -97,7 +93,7 @@ export class PlayerPage extends React.Component {
     };
 
     handleBoardAccessChange = boardAccess => {
-        //this.props.saveDoorKey(this.props.player.id, doorKey);
+        this.props.saveBoardAccess(this.props.player.id, boardAccess);
     };
 
     render() {

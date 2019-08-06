@@ -13,7 +13,7 @@ import {
     receivePlayer, receivePlayerBoardAccesses,
     receivePlayerDoorKeys,
     receivePlayerInventory,
-    receiveTroopList,
+    receiveTroopList, savePlayerBoardAccess, savePlayerBoardAccessSuccess,
     savePlayerDoorKey,
     savePlayerDoorKeySuccess,
     setPlayer,
@@ -105,6 +105,25 @@ const mapDispatchToProps = dispatch => ({
             })
             .then(doorKey => dispatch(savePlayerDoorKeySuccess(doorKey)))
             .catch(() => message.error('An error occured while trying to save the door key'));
+    },
+
+    saveBoardAccess: (playerId, boardAccess) => {
+        boardAccess['player'] = {id: playerId};
+        dispatch(savePlayerBoardAccess(boardAccess));
+        fetch('/api/player/boardAccess', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(boardAccess)
+        })
+            .then(resp => {
+                if (resp.status === 200) message.success('Board access successfully saved');
+                else message.error('An error occured while trying to save the board access');
+                return resp.json();
+            })
+            .then(boardAccess => dispatch(savePlayerBoardAccessSuccess(boardAccess)))
+            .catch(() => message.error('An error occured while trying to save the board access'));
     },
 
     fetchTroopList: () => {

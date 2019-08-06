@@ -159,3 +159,13 @@ export const savePlayerDoorKeySuccess = doorKey => ({
     type: PlayerPageActions.SAVE_PLAYER_DOOR_KEY_SUCCESS,
     doorKey: doorKey
 });
+
+export const savePlayerBoardAccess = boardAccess => ({
+    type: PlayerPageActions.SAVE_PLAYER_BOARD_ACCESS,
+    boardAccess: boardAccess
+});
+
+export const savePlayerBoardAccessSuccess = boardAccess => ({
+    type: PlayerPageActions.SAVE_PLAYER_BOARD_ACCESS_SUCCESS,
+    boardAccess: boardAccess
+});

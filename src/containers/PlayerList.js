@@ -1,4 +1,4 @@
-import {fetchPlayerList, PlayerListActions, updatePlayerList} from "../actions/playerList";
+import {fetchPlayerList, updatePlayerList} from "../actions/playerList";
 import {connect} from "react-redux";
 import PlayerList from "../components/PlayerList";
 
