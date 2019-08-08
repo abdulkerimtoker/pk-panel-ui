@@ -45,7 +45,7 @@ export default class PlayerField extends React.Component {
         return (
             <Row style={{marginBottom: 10}}>
                 <Col span={4}>
-                    <label>{this.props.title}:</label>
+                    <label>{this.props.title}</label>
                 </Col>
                 <Col span={20}>{inputField}</Col>
             </Row>

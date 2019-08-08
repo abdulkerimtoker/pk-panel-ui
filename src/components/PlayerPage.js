@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Tabs} from "antd";
+import {Button, Select, Tabs, Col, Row} from "antd";
 import {Redirect} from "react-router-dom";
 import PlayerField from "./PlayerField";
 
@@ -119,12 +119,16 @@ export class PlayerPage extends React.Component {
                                 <div>
                                     {this.props.inventory.slots.map(slot => (
                                         <PlayerField type="item" object={slot} field="item" title={'Slot ' + slot.slot} onChange={this.handleInventorySlotChange}
-                                                objectList={this.props.itemList} key={slot.slot.toString()} />
+                                                     objectList={this.props.itemList} key={slot.slot.toString()} />
                                     ))}
                                 </div>
                             ) : null}
                         </TabPane>
                         <TabPane tab="Door Keys" key="doorkeys">
+                            {this.props.doorList ? (
+                                <PlayerAssignField type="doorKey" field="door" title="Assign door key" objectList={this.props.doorList}
+                                                   onSave={this.handleDoorKeyChange} />
+                            ) : null}
                             {this.props.doorKeys ? (
                                 <div>
                                     {this.props.doorKeys.map(doorKey => (
@@ -151,3 +155,32 @@ export class PlayerPage extends React.Component {
     }
 }
 
+class PlayerAssignField extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            object: {
+                [this.props.field]: this.props.objectList[0]
+            }
+        };
+    }
+
+    onChange = (newObjectState) => {
+        this.setState({object: newObjectState});
+    };
+
+    render() {
+        return (
+            <Row style={{marginBottom: 10}}>
+                <Col span={20}>
+                    <PlayerField type={this.props.type} object={this.state.object} field={this.props.field}
+                                 title={this.props.title} onChange={this.onChange} objectList={this.props.objectList} />
+                </Col>
+                <Col span={4}>
+                    <Button onClick={() => this.props.onSave(this.state.object)}>Save</Button>
+                </Col>
+            </Row>
+        );
+    }
+}
