@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Select, Tabs, Col, Row} from "antd";
+import {Button, Select, Tabs, Col, Row, Checkbox} from "antd";
 import {Redirect} from "react-router-dom";
 import PlayerField from "./PlayerField";
 
@@ -126,8 +126,10 @@ export class PlayerPage extends React.Component {
                         </TabPane>
                         <TabPane tab="Door Keys" key="doorkeys">
                             {this.props.doorList ? (
-                                <PlayerAssignField type="doorKey" field="door" title="Assign door key" objectList={this.props.doorList}
-                                                   onSave={this.handleDoorKeyChange} />
+                                <PlayerAssignField type="doorKey" field="door"
+                                                   objectList={this.props.doorList} onSave={this.handleDoorKeyChange}>
+                                    <CheckBoxField field="isOwner" defaultValue={false} label="Is Owner?" />
+                                </PlayerAssignField>
                             ) : null}
                             {this.props.doorKeys ? (
                                 <div>
@@ -139,6 +141,12 @@ export class PlayerPage extends React.Component {
                             ) : null}
                         </TabPane>
                         <TabPane tab="Board Accesses" key="boardaccesses">
+                            {this.props.boardList ? (
+                                <PlayerAssignField type="boardAccess" field="board"
+                                                   objectList={this.props.boardList} onSave={this.handleBoardAccessChange}>
+                                    <CheckBoxField field="isOwner" defaultValue={false} label="Is Owner?" />
+                                </PlayerAssignField>
+                            ) : null}
                             {this.props.boardAccesses ? (
                                 <div>
                                     {this.props.boardAccesses.map(boardAccess => (
@@ -170,17 +178,45 @@ class PlayerAssignField extends React.Component {
         this.setState({object: newObjectState});
     };
 
+    setObjectField = (field, value) => {
+        this.setState({object: Object.assign({}, this.state.object, {[field]: value})});
+        console.log(field + value + ' ' + JSON.stringify(this.state));
+    };
+
     render() {
+        let spanForSubFields = React.Children.count(this.props.children) * 3;
         return (
             <Row style={{marginBottom: 10}}>
-                <Col span={20}>
+                <Col span={22 - spanForSubFields}>
                     <PlayerField type={this.props.type} object={this.state.object} field={this.props.field}
                                  title={this.props.title} onChange={this.onChange} objectList={this.props.objectList} />
                 </Col>
-                <Col span={4}>
-                    <Button onClick={() => this.props.onSave(this.state.object)}>Save</Button>
+                {React.Children.map(this.props.children, child => (
+                    <Col span={3}>
+                        { React.cloneElement(child,
+                            {setObjectField: this.setObjectField, value: this.state.object[child.props.field]}) }
+                    </Col>
+                ))}
+                <Col span={2}>
+                    <Button onClick={() => this.props.onSave(this.state.object)}>Assign</Button>
                 </Col>
             </Row>
+        );
+    }
+}
+
+class CheckBoxField extends React.Component {
+
+    componentDidMount() {
+        this.props.setObjectField(this.props.field, this.props.defaultValue);
+    }
+
+    render() {
+        return (
+            <Checkbox value={this.props.value} style={{marginLeft: 10}}
+                      onChange={(event) => this.props.setObjectField(this.props.field, event.target.checked)}>
+                {this.props.label}
+            </Checkbox>
         );
     }
 }

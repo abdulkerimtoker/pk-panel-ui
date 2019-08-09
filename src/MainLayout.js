@@ -9,7 +9,7 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
 
 const MainLayout = () => (
-    <Layout>
+    <Layout style={{ width: '100vw', height: '100vh'}}>
         <Layout>
             <Sider
                 style={{
@@ -39,12 +39,7 @@ const MainLayout = () => (
                     </Menu.Item>
                 </Menu>
             </Sider>
-            <Content style={{ padding: '0 50px', marginLeft: 200 }}>
-                <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item>List</Breadcrumb.Item>
-                    <Breadcrumb.Item>App</Breadcrumb.Item>
-                </Breadcrumb>
+            <Content style={{ padding: '24px', marginLeft: 200 }}>
                 <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
                     <Switch>
                         <Route path="/players" component={PlayerList} />
