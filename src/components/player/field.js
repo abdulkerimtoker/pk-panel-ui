@@ -22,6 +22,7 @@ export default class PlayerField extends React.Component {
 
     render() {
         let inputField;
+        let x = {};
 
         switch (this.props.type) {
             case fieldTypes.text:

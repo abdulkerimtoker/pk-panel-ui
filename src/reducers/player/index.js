@@ -1,4 +1,4 @@
-import {PlayerPageActions} from "../actions/playerPage";
+import {PlayerPageActions} from "../../actions/player";
 
 export const player = (state = null, action) => {
     switch (action.type) {
@@ -31,9 +31,13 @@ export const doorKeys = (state = null, action) => {
         case PlayerPageActions.RECEIVE_PLAYER_DOOR_KEYS:
             return action.doorKeys;
         case PlayerPageActions.SAVE_PLAYER_DOOR_KEY_SUCCESS:
-            return state.map(doorKey =>
-                doorKey.id === action.doorKey.id ? action.doorKey : doorKey
-            );
+            if (state.filter(doorKey => doorKey.id === action.doorKey.id).length <= 0) {
+                return [...state, action.doorKey];
+            } else {
+                return state.map(doorKey =>
+                    doorKey.id === action.doorKey.id ? action.doorKey : doorKey
+                );
+            }
     }
     return state;
 };
@@ -43,9 +47,13 @@ export const boardAccesses = (state = null, action) => {
         case PlayerPageActions.RECEIVE_PLAYER_BOARD_ACCESSES:
             return action.boardAccesses;
         case PlayerPageActions.SAVE_PLAYER_BOARD_ACCESS_SUCCESS:
-            return state.map(boardAccess =>
-                boardAccess.id === action.boardAccess.id ? action.boardAccess : boardAccess
-            );
+            if (state.filter(boardAccess => boardAccess.id === action.boardAccess.id).length <= 0) {
+                return [...state, action.boardAccess];
+            } else {
+                return state.map(boardAccess =>
+                    boardAccess.id === action.boardAccess.id ? action.boardAccess : boardAccess
+                );
+            }
     }
     return state;
 };

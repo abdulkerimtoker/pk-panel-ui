@@ -1,11 +1,11 @@
 import React from "react";
 import {Button, Select, Tabs, Col, Row, Checkbox} from "antd";
 import {Redirect} from "react-router-dom";
-import PlayerField from "./PlayerField";
+import PlayerField from "./field";
 
 const { TabPane } = Tabs;
 
-export class PlayerPage extends React.Component {
+export class Index extends React.Component {
 
     componentWillMount() {
         let playerId = this.props.match.params.id;
@@ -180,7 +180,6 @@ class PlayerAssignField extends React.Component {
 
     setObjectField = (field, value) => {
         this.setState({object: Object.assign({}, this.state.object, {[field]: value})});
-        console.log(field + value + ' ' + JSON.stringify(this.state));
     };
 
     render() {

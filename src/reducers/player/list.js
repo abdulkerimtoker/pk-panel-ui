@@ -1,4 +1,4 @@
-import {PlayerListActions} from "../actions/playerList";
+import {PlayerListActions} from "../../actions/player/list";
 
 export const playerList = (state = [], action) => {
     switch (action.type) {

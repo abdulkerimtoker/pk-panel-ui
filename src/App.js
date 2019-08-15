@@ -1,6 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
-import MainLayout from './MainLayout'
+import MainLayout from './components/layout'
 
 class App extends React.Component {
     constructor(props) {

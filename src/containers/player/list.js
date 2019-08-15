@@ -1,6 +1,6 @@
-import {fetchPlayerList, updatePlayerList} from "../actions/playerList";
+import {fetchPlayerList, updatePlayerList} from "../../actions/player/list";
 import {connect} from "react-redux";
-import PlayerList from "../components/PlayerList";
+import PlayerList from "../../components/player/list";
 
 const mapStateToProps = state => ({
     playerList: state.playerList,

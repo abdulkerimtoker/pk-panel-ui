@@ -21,9 +21,9 @@ import {
     updateInventorySlotSuccess,
     updatePlayer,
     updatePlayerSuccess
-} from "../actions/playerPage";
+} from "../../actions/player";
 import {connect} from "react-redux";
-import {PlayerPage} from "../components/PlayerPage";
+import {Index} from "../../components/player";
 import {message} from "antd";
 
 const mapStateToProps = state => ({
@@ -186,4 +186,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(PlayerPage);
+)(Index);

@@ -1,5 +1,5 @@
 import {combineReducers} from "redux";
-import { playerList } from "./playerList"
+import { playerList } from "./player/list"
 import {
     boardAccesses,
     boardList,
@@ -10,7 +10,7 @@ import {
     itemList,
     player,
     troopList
-} from "./playerPage";
+} from "./player";
 
 export default combineReducers({
     playerList,
