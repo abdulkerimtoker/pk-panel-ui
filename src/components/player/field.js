@@ -1,5 +1,5 @@
 import React from "react";
-import {Col, Input, Row, Select} from "antd";
+import {Checkbox, Col, Input, Row, Select} from "antd";
 
 const { Option } = Select;
 
@@ -22,16 +22,15 @@ export default class PlayerField extends React.Component {
 
     render() {
         let inputField;
-        let x = {};
 
         switch (this.props.type) {
             case fieldTypes.text:
                 inputField = <InputField type="text" object={this.props.object} field={this.props.field}
-                                         onChange={this.props.onChange} />;
+                                         onChange={this.props.onChange} saveOnChange={true} />;
                 break;
             case fieldTypes.number:
                 inputField = <InputField type="number" object={this.props.object} field={this.props.field}
-                                         onChange={this.props.onChange} parser={parseInt} />;
+                                         onChange={this.props.onChange} saveOnChange={true} parser={parseInt} />;
                 break;
             case fieldTypes.troop:
             case fieldTypes.faction:
@@ -50,18 +49,42 @@ export default class PlayerField extends React.Component {
                         <label>{this.props.title}</label>
                     </Col>
                 ) : null}
-                <Col span={this.props.title ? 22 : 24}>{inputField}</Col>
+                <Col span={this.props.title ? 16 : 18}>
+                    {inputField}
+                </Col>
+                {this.props.extraFields ? this.props.extraFields.map(field => {
+                    switch (field.type) {
+                        case 'text':
+                            return (
+                                <Col span={2}>
+                                    <InputField type="text" object={this.props.object} field={field.name}
+                                                onChange={this.props.onChange} />
+                                </Col>
+                            );
+                        case 'number':
+                            return (
+                                <Col span={2}>
+                                    <InputField type="number" object={this.props.object} field={field.name}
+                                                onChange={this.props.onChange} parser={parseInt} />
+                                </Col>
+                            );
+                        case 'boolean':
+                            return (
+                                <Col span={2}>
+                                    <CheckBoxField object={this.props.object} field={field.name}
+                                                   onChange={this.props.onChange} label={field.label} />
+                                </Col>
+                            );
+                        default:
+                            return null;
+                    }
+                }) : null}
             </Row>
         );
     }
 }
 
 class InputField extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {filteredObjects: null};
-    }
 
     handleChange = (event) => {
         let object = Object.assign({}, this.props.object);
@@ -70,7 +93,31 @@ class InputField extends React.Component {
     };
 
     render() {
-        return <Input type={this.props.type} value={this.props.object[this.props.field].toString()} onChange={this.handleChange} />;
+        if (this.props.saveOnChange) {
+            return <Input type={this.props.type} value={this.props.object[this.props.field].toString()}
+                          onChange={this.handleChange} />;
+        } else {
+            return <Input type={this.props.type} value={this.props.object[this.props.field].toString()}
+                          onPressEnter={this.handleChange} onBlur={this.handleChange} />;
+        }
+    }
+}
+
+class CheckBoxField extends React.Component {
+
+    handleChange = (event) => {
+        let object = Object.assign({}, this.props.object);
+        object[this.props.field] = event.target.checked;
+        this.props.onChange(object);
+    };
+
+    render() {
+        return (
+            <Checkbox value={this.props.object[this.props.field]} style={{marginLeft: 10}}
+                      onChange={this.handleChange}>
+                {this.props.label}
+            </Checkbox>
+        );
     }
 }
 

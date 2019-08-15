@@ -119,7 +119,10 @@ export class Index extends React.Component {
                                 <div>
                                     {this.props.inventory.slots.map(slot => (
                                         <PlayerField type="item" object={slot} field="item" title={'Slot ' + slot.slot} onChange={this.handleInventorySlotChange}
-                                                     objectList={this.props.itemList} key={slot.slot.toString()} />
+                                                     objectList={this.props.itemList} key={slot.slot.toString()}
+                                                     extraFields={[
+                                                         {name: 'ammo', type: 'number'}
+                                                     ]} />
                                     ))}
                                 </div>
                             ) : null}
