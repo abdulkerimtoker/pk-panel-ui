@@ -19,11 +19,17 @@ export const PlayerPageActions = {
     FETCH_PLAYER_BOARD_ACCESSES: 'REQUEST_PLAYER_BOARD_ACCESSES',
     RECEIVE_PLAYER_BOARD_ACCESSES: 'RESPONSE_PLAYER_BOARD_ACCESSES',
 
+    FETCH_PLAYER_PROFESSION_ASSIGNMENTS: 'REQUEST_PLAYER_PROFESSION_ASSIGNMENTS',
+    RECEIVE_PLAYER_PROFESSION_ASSIGNMENTS: 'RESPONSE_PLAYER_PROFESSION_ASSIGNMENTS',
+
     SAVE_PLAYER_DOOR_KEY: 'REQUEST_SAVE_PLAYER_DOOR_KEY',
     SAVE_PLAYER_DOOR_KEY_SUCCESS: 'RESPONSE_SAVE_PLAYER_DOOR_KEY',
 
     SAVE_PLAYER_BOARD_ACCESS: 'REQUEST_SAVE_PLAYER_BOARD_ACCESS',
     SAVE_PLAYER_BOARD_ACCESS_SUCCESS: 'RESPONSE_SAVE_PLAYER_BOARD_ACCESS',
+
+    SAVE_PLAYER_PROFESSION_ASSIGNMENT: 'REQUEST_PLAYER_PROFESSION_ASSIGNMENT',
+    SAVE_PLAYER_PROFESSION_ASSIGNMENT_SUCCESS: 'RESPONSE_PLAYER_PROFESSION_ASSIGNMENT',
 
     FETCH_TROOP_LIST: 'REQUEST_TROOP_LIST',
     RECEIVE_TROOP_LIST: 'RESPONSE_TROOP_LIST',
@@ -38,7 +44,10 @@ export const PlayerPageActions = {
     RECEIVE_DOOR_LIST: 'RESPONSE_DOOR_LIST',
 
     FETCH_BOARD_LIST: 'REQUEST_BOARD_LIST',
-    RECEIVE_BOARD_LIST: 'RESPONSE_BOARD_LIST'
+    RECEIVE_BOARD_LIST: 'RESPONSE_BOARD_LIST',
+
+    FETCH_PROFESSION_LIST: 'REQUEST_PROFESSION_LIST',
+    RECEIVE_PROFESSION_LIST: 'RESPONSE_PROFESSION_LIST',
 };
 
 export const fetchPlayer = id => ({
@@ -95,6 +104,16 @@ export const receivePlayerBoardAccesses = boardAccesses => ({
     boardAccesses: boardAccesses
 });
 
+export const fetchPlayerProfessionAssignments = id => ({
+    type: PlayerPageActions.FETCH_PLAYER_PROFESSION_ASSIGNMENTS,
+    id: id
+});
+
+export const receivePlayerProfessionAssignments = professionAssignments => ({
+    type: PlayerPageActions.RECEIVE_PLAYER_PROFESSION_ASSIGNMENTS,
+    professionAssignments: professionAssignments
+});
+
 export const fetchTroopList = () => ({
     type: PlayerPageActions.FETCH_TROOP_LIST
 });
@@ -113,6 +132,10 @@ export const fetchDoorList = () => ({
 
 export const fetchBoardList = () => ({
     type: PlayerPageActions.FETCH_BOARD_LIST
+});
+
+export const fetchProfessionList = () => ({
+    type: PlayerPageActions.FETCH_PROFESSION_LIST
 });
 
 export const receiveTroopList = troopList => ({
@@ -138,6 +161,11 @@ export const receiveDoorList = doorList => ({
 export const receiveBoardList = boardList => ({
     type: PlayerPageActions.RECEIVE_BOARD_LIST,
     boardList: boardList
+});
+
+export const receiveProfessionList = professionList => ({
+    type: PlayerPageActions.RECEIVE_PROFESSION_LIST,
+    professionList: professionList
 });
 
 export const updateInventorySlot = inventorySlot => ({
@@ -168,4 +196,14 @@ export const savePlayerBoardAccess = boardAccess => ({
 export const savePlayerBoardAccessSuccess = boardAccess => ({
     type: PlayerPageActions.SAVE_PLAYER_BOARD_ACCESS_SUCCESS,
     boardAccess: boardAccess
+});
+
+export const savePlayerProfessionAssignment = professionAssignment => ({
+    type: PlayerPageActions.SAVE_PLAYER_PROFESSION_ASSIGNMENT,
+    professionAssignment: professionAssignment
+});
+
+export const savePlayerProfessionAssignmentSuccess = professionAssignment => ({
+    type: PlayerPageActions.SAVE_PLAYER_PROFESSION_ASSIGNMENT_SUCCESS,
+    professionAssignment: professionAssignment
 });

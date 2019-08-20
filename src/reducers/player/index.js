@@ -97,3 +97,11 @@ export const boardList = (state = null, action) => {
     }
     return state;
 };
+
+export const professionList = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_PROFESSION_LIST:
+            return action.professionList;
+    }
+    return state;
+};

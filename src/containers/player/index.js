@@ -5,17 +5,17 @@ import {
     fetchItemList,
     fetchPlayer, fetchPlayerBoardAccesses,
     fetchPlayerDoorKeys,
-    fetchPlayerInventory,
+    fetchPlayerInventory, fetchPlayerProfessionAssignments, fetchProfessionList,
     fetchTroopList, receiveBoardList,
     receiveDoorList,
     receiveFactionList,
     receiveItemList,
     receivePlayer, receivePlayerBoardAccesses,
     receivePlayerDoorKeys,
-    receivePlayerInventory,
+    receivePlayerInventory, receivePlayerProfessionAssignments, receiveProfessionList,
     receiveTroopList, savePlayerBoardAccess, savePlayerBoardAccessSuccess,
     savePlayerDoorKey,
-    savePlayerDoorKeySuccess,
+    savePlayerDoorKeySuccess, savePlayerProfessionAssignment, savePlayerProfessionAssignmentSuccess,
     setPlayer,
     updateInventorySlot,
     updateInventorySlotSuccess,
@@ -126,6 +126,25 @@ const mapDispatchToProps = dispatch => ({
             .catch(() => message.error('An error occured while trying to save the board access'));
     },
 
+    saveProfessionAssignment: (playerId, professionAssignment) => {
+        professionAssignment['player'] = {id: playerId};
+        dispatch(savePlayerProfessionAssignment(professionAssignment));
+        fetch('/api/player/professionAssignment', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(professionAssignment)
+        })
+            .then(resp => {
+                if (resp.status === 200) message.success('Profession assignment successfully saved');
+                else message.error('An error occured while trying to save the profession assignment');
+                return resp.json();
+            })
+            .then(professionAssignment => dispatch(savePlayerProfessionAssignmentSuccess(professionAssignment)))
+            .catch(() => message.error('An error occured while trying to save the profession assignment'));
+    },
+
     fetchTroopList: () => {
         dispatch(fetchTroopList());
         fetch('/api/troop')
@@ -161,6 +180,13 @@ const mapDispatchToProps = dispatch => ({
             .then(boardList => dispatch(receiveBoardList(boardList)));
     },
 
+    fetchProfessionList: () => {
+        dispatch(fetchProfessionList());
+        fetch('/api/profession')
+            .then(resp => resp.json())
+            .then(professionList => dispatch(receiveProfessionList(professionList)));
+    },
+
     fetchInventory: (id) => {
         dispatch(fetchPlayerInventory(id));
         fetch('/api/player/' + id + '/inventory')
@@ -180,6 +206,13 @@ const mapDispatchToProps = dispatch => ({
         fetch('/api/player/' + id + '/boardAccesses')
             .then(resp => resp.json())
             .then(boardAccesses => dispatch(receivePlayerBoardAccesses(boardAccesses)));
+    },
+
+    fetchProfessionAssignments: (id) => {
+        dispatch(fetchPlayerProfessionAssignments(id));
+        fetch('/api/player/' + id + '/professionAssignments')
+            .then(resp => resp.json())
+            .then(professionAssignments => dispatch(receivePlayerProfessionAssignments(professionAssignments)));
     }
 });
 

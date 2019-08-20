@@ -1,7 +1,7 @@
 import React from "react";
 import {Button, Select, Tabs, Col, Row, Checkbox} from "antd";
 import {Redirect} from "react-router-dom";
-import PlayerField from "./field";
+import PlayerField, {CheckBoxAssignField, PlayerAssignField} from "./field";
 
 const { TabPane } = Tabs;
 
@@ -130,15 +130,19 @@ export class Index extends React.Component {
                         <TabPane tab="Door Keys" key="doorkeys">
                             {this.props.doorList ? (
                                 <PlayerAssignField type="doorKey" field="door"
-                                                   objectList={this.props.doorList} onSave={this.handleDoorKeyChange}>
-                                    <CheckBoxField field="isOwner" defaultValue={false} label="Is Owner?" />
-                                </PlayerAssignField>
+                                                   objectList={this.props.doorList} onSave={this.handleDoorKeyChange}
+                                                   extraFields={[
+                                                       {name: 'isOwner', type: 'boolean', label:'Is Owner?'}
+                                                   ]}/>
                             ) : null}
                             {this.props.doorKeys ? (
                                 <div>
                                     {this.props.doorKeys.map(doorKey => (
                                         <PlayerField type="doorKey" object={doorKey} field="door" title={'ID: ' + doorKey.id} onChange={this.handleDoorKeyChange}
-                                                     objectList={this.props.doorList} key={doorKey.id.toString()} />
+                                                     objectList={this.props.doorList} key={doorKey.id.toString()}
+                                                     extraFields={[
+                                                         {name: 'isOwner', type: 'boolean', label:'Is Owner?'}
+                                                     ]} />
                                     ))}
                                 </div>
                             ) : null}
@@ -146,15 +150,39 @@ export class Index extends React.Component {
                         <TabPane tab="Board Accesses" key="boardaccesses">
                             {this.props.boardList ? (
                                 <PlayerAssignField type="boardAccess" field="board"
-                                                   objectList={this.props.boardList} onSave={this.handleBoardAccessChange}>
-                                    <CheckBoxField field="isOwner" defaultValue={false} label="Is Owner?" />
-                                </PlayerAssignField>
+                                                   objectList={this.props.boardList} onSave={this.handleBoardAccessChange}
+                                                   extraFields={[
+                                                       {name: 'isOwner', type: 'boolean', label:'Is Owner?'}
+                                                   ]}/>
                             ) : null}
                             {this.props.boardAccesses ? (
                                 <div>
                                     {this.props.boardAccesses.map(boardAccess => (
                                         <PlayerField type="boardAccess" object={boardAccess} field="board" title={'ID: ' + boardAccess.id} onChange={this.handleBoardAccessChange}
-                                                     objectList={this.props.boardList} key={boardAccess.id.toString()} />
+                                                     objectList={this.props.boardList} key={boardAccess.id.toString()}
+                                                     extraFields={[
+                                                         {name: 'isOwner', type: 'boolean', label:'Is Owner?'}
+                                                     ]} />
+                                    ))}
+                                </div>
+                            ) : null}
+                        </TabPane>
+                        <TabPane tab="Professions" key="professions">
+                            {this.props.boardList ? (
+                                <PlayerAssignField type="profession" field="profession"
+                                                   objectList={this.props.boardList} onSave={this.handleBoardAccessChange}
+                                                   extraFields={[
+                                                       {name: 'isOwner', type: 'boolean', label:'Is Owner?'}
+                                                   ]}/>
+                            ) : null}
+                            {this.props.boardAccesses ? (
+                                <div>
+                                    {this.props.boardAccesses.map(boardAccess => (
+                                        <PlayerField type="boardAccess" object={boardAccess} field="board" title={'ID: ' + boardAccess.id} onChange={this.handleBoardAccessChange}
+                                                     objectList={this.props.boardList} key={boardAccess.id.toString()}
+                                                     extraFields={[
+                                                         {name: 'isOwner', type: 'boolean', label:'Is Owner?'}
+                                                     ]} />
                                     ))}
                                 </div>
                             ) : null}
@@ -162,63 +190,6 @@ export class Index extends React.Component {
                     </Tabs>
                 </div>
                 : null
-        );
-    }
-}
-
-class PlayerAssignField extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            object: {
-                [this.props.field]: this.props.objectList[0]
-            }
-        };
-    }
-
-    onChange = (newObjectState) => {
-        this.setState({object: newObjectState});
-    };
-
-    setObjectField = (field, value) => {
-        this.setState({object: Object.assign({}, this.state.object, {[field]: value})});
-    };
-
-    render() {
-        let spanForSubFields = React.Children.count(this.props.children) * 3;
-        return (
-            <Row style={{marginBottom: 10}}>
-                <Col span={22 - spanForSubFields}>
-                    <PlayerField type={this.props.type} object={this.state.object} field={this.props.field}
-                                 title={this.props.title} onChange={this.onChange} objectList={this.props.objectList} />
-                </Col>
-                {React.Children.map(this.props.children, child => (
-                    <Col span={3}>
-                        { React.cloneElement(child,
-                            {setObjectField: this.setObjectField, value: this.state.object[child.props.field]}) }
-                    </Col>
-                ))}
-                <Col span={2}>
-                    <Button onClick={() => this.props.onSave(this.state.object)}>Assign</Button>
-                </Col>
-            </Row>
-        );
-    }
-}
-
-class CheckBoxField extends React.Component {
-
-    componentDidMount() {
-        this.props.setObjectField(this.props.field, this.props.defaultValue);
-    }
-
-    render() {
-        return (
-            <Checkbox value={this.props.value} style={{marginLeft: 10}}
-                      onChange={(event) => this.props.setObjectField(this.props.field, event.target.checked)}>
-                {this.props.label}
-            </Checkbox>
         );
     }
 }

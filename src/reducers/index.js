@@ -8,7 +8,7 @@ import {
     factionList,
     inventory,
     itemList,
-    player,
+    player, professionList,
     troopList
 } from "./player";
 
@@ -22,5 +22,6 @@ export default combineReducers({
     doorList,
     doorKeys,
     boardList,
+    professionList,
     boardAccesses
 });

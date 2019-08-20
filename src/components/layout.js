@@ -9,7 +9,7 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
 
 const MainLayout = () => (
-    <Layout style={{ width: '100vw', height: '100vh'}}>
+    <Layout style={{ width: '100vw', minHeight: '100vh'}}>
         <Layout>
             <Sider
                 style={{
