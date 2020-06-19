@@ -1,14 +1,15 @@
 import {combineReducers} from "redux";
 import { playerList } from "./player/list"
 import {
+    bans,
     boardAccesses,
-    boardList,
+    boardList, craftingRequests,
     doorKeys,
     doorList,
-    factionList,
+    factionList, fetchPlayerState,
     inventory,
     itemList,
-    player, professionList,
+    player, professionAssignments, professionList,
     troopList
 } from "./player";
 
@@ -23,5 +24,9 @@ export default combineReducers({
     doorKeys,
     boardList,
     professionList,
-    boardAccesses
+    boardAccesses,
+    bans,
+    craftingRequests,
+    professionAssignments,
+    fetchPlayerState
 });

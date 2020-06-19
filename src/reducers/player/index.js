@@ -58,6 +58,30 @@ export const boardAccesses = (state = null, action) => {
     return state;
 };
 
+export const professionAssignments = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_PLAYER_PROFESSION_ASSIGNMENTS:
+            return action.professionAssignments;
+    }
+    return state;
+};
+
+export const bans = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_BANS:
+            return action.bans;
+    }
+    return state;
+};
+
+export const craftingRequests = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_CRAFTING_REQUESTS:
+            return action.craftingRequests;
+    }
+    return state;
+};
+
 export const troopList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_TROOP_LIST:
@@ -102,6 +126,25 @@ export const professionList = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_PROFESSION_LIST:
             return action.professionList;
+    }
+    return state;
+};
+
+export const FetchPlayerStates = {
+    NOT_FETCHED: 1,
+    FETCHING: 2,
+    FETCHED: 3,
+    FAILED: 4
+};
+
+export const fetchPlayerState = (state = FetchPlayerStates.NOT_FETCHED, action) => {
+    switch (action.type) {
+        case PlayerPageActions.FETCH_PLAYER:
+            return FetchPlayerStates.FETCHING;
+        case PlayerPageActions.RECEIVE_PLAYER:
+            return FetchPlayerStates.FETCHED;
+        case PlayerPageActions.FAIL_FETCH_PLAYER:
+            return FetchPlayerStates.FAILED;
     }
     return state;
 };

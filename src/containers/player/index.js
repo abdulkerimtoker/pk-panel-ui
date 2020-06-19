@@ -1,16 +1,17 @@
 import {
-    fetchBoardList,
+    banPlayer, failFetchPlayer,
+    fetchBoardList, fetchCraftingRequests,
     fetchDoorList,
     fetchFactionList,
     fetchItemList,
-    fetchPlayer, fetchPlayerBoardAccesses,
+    fetchPlayer, fetchPlayerBans, fetchPlayerBoardAccesses,
     fetchPlayerDoorKeys,
     fetchPlayerInventory, fetchPlayerProfessionAssignments, fetchProfessionList,
-    fetchTroopList, receiveBoardList,
+    fetchTroopList, receiveBoardList, receiveCraftingRequests,
     receiveDoorList,
     receiveFactionList,
     receiveItemList,
-    receivePlayer, receivePlayerBoardAccesses,
+    receivePlayer, receivePlayerBans, receivePlayerBoardAccesses,
     receivePlayerDoorKeys,
     receivePlayerInventory, receivePlayerProfessionAssignments, receiveProfessionList,
     receiveTroopList, savePlayerBoardAccess, savePlayerBoardAccessSuccess,
@@ -23,8 +24,9 @@ import {
     updatePlayerSuccess
 } from "../../actions/player";
 import {connect} from "react-redux";
-import {Index} from "../../components/player";
-import {message} from "antd";
+import Player from "../../components/player/page/player";
+import {craftingRequests} from "../../reducers/player";
+import httpclient from "../../utils/httpclient";
 
 const mapStateToProps = state => ({
     player: state.player,
@@ -35,15 +37,21 @@ const mapStateToProps = state => ({
     inventory: state.inventory,
     doorKeys: state.doorKeys,
     boardList: state.boardList,
-    boardAccesses: state.boardAccesses
+    professionList: state.professionList,
+    boardAccesses: state.boardAccesses,
+    professionAssignments: state.professionAssignments,
+    bans: state.bans,
+    craftingRequests: state.craftingRequests,
+    fetchPlayerState: state.fetchPlayerState
 });
 
 const mapDispatchToProps = dispatch => ({
     fetchPlayer: id => {
         dispatch(fetchPlayer(id));
-        fetch('/api/player/' + id)
+        httpclient.fetch('/api/player/' + id)
             .then(resp => resp.json())
-            .then(player => dispatch(receivePlayer(player)));
+            .then(player => dispatch(receivePlayer(player)))
+            .catch(reason => dispatch(failFetchPlayer(id)));
     },
 
     setPlayer: player => {
@@ -52,17 +60,16 @@ const mapDispatchToProps = dispatch => ({
 
     updatePlayer: player => {
         dispatch(updatePlayer());
-        fetch('/api/player', {
+        httpclient.fetch('/api/player', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(player)
-        })
-            .then(resp => {
-                if (resp.status === 200) message.success('Changes were saved successfully');
-                else if (resp.status === 409) message.error('A change was made while you were editing this player. Refresh.');
-                else message.error('An error occured while trying to save the changes');
+        }).then(resp => {
+                if (resp.status === 200) alert('Changes were saved successfully');
+                else if (resp.status === 409) alert('A change was made while you were editing this player. Refresh.');
+                else alert('An error occured while trying to save the changes');
                 return resp;
             })
             .then(resp => resp.json())
@@ -72,7 +79,7 @@ const mapDispatchToProps = dispatch => ({
     updateInventorySlot: (inventoryId, inventorySlot) => {
         inventorySlot['inventory'] = {id: inventoryId};
         dispatch(updateInventorySlot(inventorySlot));
-        fetch('/api/player/inventory/slot', {
+        httpclient.fetch('/api/player/inventory/slot', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,18 +87,18 @@ const mapDispatchToProps = dispatch => ({
             body: JSON.stringify(inventorySlot)
         })
             .then(resp => {
-                if (resp.status === 200) message.success('Slot successfully updated');
-                else message.error('An error occured while trying to update the inventory slot');
+                if (resp.status === 200) alert('Slot successfully updated');
+                else alert('An error occured while trying to update the inventory slot');
                 return resp.json();
             })
             .then(inventorySlot => dispatch(updateInventorySlotSuccess(inventorySlot)))
-            .catch(() => message.error('An error occured while trying to update the inventory slot'));
+            .catch(() => alert('An error occured while trying to update the inventory slot'));
     },
 
     saveDoorKey: (playerId, doorKey) => {
         doorKey['player'] = {id: playerId};
         dispatch(savePlayerDoorKey(doorKey));
-        fetch('/api/player/doorKey', {
+        httpclient.fetch('/api/player/doorKey', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -99,18 +106,18 @@ const mapDispatchToProps = dispatch => ({
             body: JSON.stringify(doorKey)
         })
             .then(resp => {
-                if (resp.status === 200) message.success('Door key successfully saved');
-                else message.error('An error occured while trying to save the door key');
+                if (resp.status === 200) alert('Door key successfully saved');
+                else alert('An error occured while trying to save the door key');
                 return resp.json();
             })
             .then(doorKey => dispatch(savePlayerDoorKeySuccess(doorKey)))
-            .catch(() => message.error('An error occured while trying to save the door key'));
+            .catch(() => alert('An error occured while trying to save the door key'));
     },
 
     saveBoardAccess: (playerId, boardAccess) => {
         boardAccess['player'] = {id: playerId};
         dispatch(savePlayerBoardAccess(boardAccess));
-        fetch('/api/player/boardAccess', {
+        httpclient.fetch('/api/player/boardAccess', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -118,18 +125,18 @@ const mapDispatchToProps = dispatch => ({
             body: JSON.stringify(boardAccess)
         })
             .then(resp => {
-                if (resp.status === 200) message.success('Board access successfully saved');
-                else message.error('An error occured while trying to save the board access');
+                if (resp.status === 200) alert('Board access successfully saved');
+                else alert('An error occured while trying to save the board access');
                 return resp.json();
             })
             .then(boardAccess => dispatch(savePlayerBoardAccessSuccess(boardAccess)))
-            .catch(() => message.error('An error occured while trying to save the board access'));
+            .catch(() => alert('An error occured while trying to save the board access'));
     },
 
     saveProfessionAssignment: (playerId, professionAssignment) => {
         professionAssignment['player'] = {id: playerId};
         dispatch(savePlayerProfessionAssignment(professionAssignment));
-        fetch('/api/player/professionAssignment', {
+        httpclient.fetch('/api/player/professionAssignment', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -137,86 +144,110 @@ const mapDispatchToProps = dispatch => ({
             body: JSON.stringify(professionAssignment)
         })
             .then(resp => {
-                if (resp.status === 200) message.success('Profession assignment successfully saved');
-                else message.error('An error occured while trying to save the profession assignment');
+                if (resp.status === 200) alert('Profession assignment successfully saved');
+                else alert('An error occured while trying to save the profession assignment');
                 return resp.json();
             })
             .then(professionAssignment => dispatch(savePlayerProfessionAssignmentSuccess(professionAssignment)))
-            .catch(() => message.error('An error occured while trying to save the profession assignment'));
+            .catch(() => alert('An error occured while trying to save the profession assignment'));
+    },
+
+    ban: ban => {
+        dispatch(banPlayer(ban));
+        httpclient.fetch('/api/ban', {
+            method: 'POST'
+        })
     },
 
     fetchTroopList: () => {
         dispatch(fetchTroopList());
-        fetch('/api/troop')
+        httpclient.fetch('/api/troop')
             .then(resp => resp.json())
             .then(troopList => dispatch(receiveTroopList(troopList)));
     },
 
     fetchFactionList: () => {
         dispatch(fetchFactionList());
-        fetch('/api/faction')
+        httpclient.fetch('/api/faction')
             .then(resp => resp.json())
             .then(factionList => dispatch(receiveFactionList(factionList)));
     },
 
     fetchItemList: () => {
         dispatch(fetchItemList());
-        fetch('/api/item')
+        httpclient.fetch('/api/item')
             .then(resp => resp.json())
             .then(itemList => dispatch(receiveItemList(itemList)));
     },
 
     fetchDoorList: () => {
         dispatch(fetchDoorList());
-        fetch('/api/door')
+        httpclient.fetch('/api/door')
             .then(resp => resp.json())
             .then(doorList => dispatch(receiveDoorList(doorList)));
     },
 
     fetchBoardList: () => {
         dispatch(fetchBoardList());
-        fetch('/api/board')
+        httpclient.fetch('/api/board')
             .then(resp => resp.json())
             .then(boardList => dispatch(receiveBoardList(boardList)));
     },
 
     fetchProfessionList: () => {
         dispatch(fetchProfessionList());
-        fetch('/api/profession')
+        httpclient.fetch('/api/profession')
             .then(resp => resp.json())
             .then(professionList => dispatch(receiveProfessionList(professionList)));
     },
 
     fetchInventory: (id) => {
         dispatch(fetchPlayerInventory(id));
-        fetch('/api/player/' + id + '/inventory')
+        httpclient.fetch('/api/player/' + id + '/inventory')
             .then(resp => resp.json())
             .then(inventory => dispatch(receivePlayerInventory(inventory)));
     },
 
     fetchDoorKeys: (id) => {
         dispatch(fetchPlayerDoorKeys(id));
-        fetch('/api/player/' + id + '/doorKeys')
+        httpclient.fetch('/api/player/' + id + '/doorKeys')
             .then(resp => resp.json())
             .then(doorKeys => dispatch(receivePlayerDoorKeys(doorKeys)));
     },
 
     fetchBoardAccesses: (id) => {
         dispatch(fetchPlayerBoardAccesses(id));
-        fetch('/api/player/' + id + '/boardAccesses')
+        httpclient.fetch('/api/player/' + id + '/boardAccesses')
             .then(resp => resp.json())
             .then(boardAccesses => dispatch(receivePlayerBoardAccesses(boardAccesses)));
     },
 
     fetchProfessionAssignments: (id) => {
         dispatch(fetchPlayerProfessionAssignments(id));
-        fetch('/api/player/' + id + '/professionAssignments')
+        httpclient.fetch('/api/player/' + id + '/professionAssignments')
             .then(resp => resp.json())
-            .then(professionAssignments => dispatch(receivePlayerProfessionAssignments(professionAssignments)));
+            .then(professionAssignments => {
+                dispatch(receivePlayerProfessionAssignments(professionAssignments));
+                console.log(JSON.stringify(professionAssignments));
+            });
+    },
+
+    fetchBans: (uniqueId) => {
+        dispatch(fetchPlayerBans(uniqueId));
+        httpclient.fetch('/api/bans/player/' + uniqueId)
+            .then(resp => resp.json())
+            .then(bans => dispatch(receivePlayerBans(bans)));
+    },
+
+    fetchCraftingRequests: (id) => {
+        dispatch(fetchCraftingRequests(id));
+        httpclient.fetch('/api/player/' + id + '/craftingRequests')
+            .then(resp => resp.json())
+            .then(craftingRequests => dispatch(receiveCraftingRequests(craftingRequests)));
     }
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Index);
+)(Player);

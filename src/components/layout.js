@@ -1,55 +1,222 @@
 import React from 'react';
 
-import {Layout, Menu, Breadcrumb, Icon} from 'antd';
 import PlayerList from "../containers/player/list";
-import {Link, Redirect, Route, Switch} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import PlayerPage from "../containers/player";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import {withStyles} from "@material-ui/core/styles";
+import MenuIcon from "@material-ui/icons/Menu";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Drawer from "@material-ui/core/Drawer";
+import clsx from "clsx";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import BoardIcon from '@material-ui/icons/Assessment';
+import AdminIcon from '@material-ui/icons/AccessibleForward';
+import LogIcon from '@material-ui/icons/Subject';
+import DoorIcon from '@material-ui/icons/MeetingRoom'
+import PeopleIcon from '@material-ui/icons/People';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import withTheme from "@material-ui/core/styles/withTheme";
+import withRouter from "react-router-dom/es/withRouter";
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
+const drawerWidth = 240;
 
-const MainLayout = () => (
-    <Layout style={{ width: '100vw', minHeight: '100vh'}}>
-        <Layout>
-            <Sider
-                style={{
-                    overflow: 'auto',
-                    height: '100vh',
-                    position: 'fixed',
-                    left: 0
-                }}
-            >
-                <div className="logo" />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                    <Menu.Item key="1">
-                        <Link to="/players">
-                            <Icon type="user" />
-                            <span className="nav-text">Players</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Link to="/videos">
-                            <Icon type="video-camera" />
-                            <span className="nav-text">nav 2</span>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="upload" />
-                        <span className="nav-text">nav 3</span>
-                    </Menu.Item>
-                </Menu>
-            </Sider>
-            <Content style={{ padding: '24px', marginLeft: 200 }}>
-                <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
+const styles = theme => ({
+    root: {
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    menuButton: {
+        marginRight: 36,
+    },
+    hide: {
+        display: 'none',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
+    },
+    drawerOpen: {
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerClose: {
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        overflowX: 'hidden',
+        width: theme.spacing(7) + 1,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(9) + 1,
+        },
+    },
+    toolbar: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+    contentDrawerOpen: {
+        width: `calc(100% - ${drawerWidth}px)`
+    },
+    contentDrawerClosed: {
+        width: `calc(100% - ${theme.spacing(7) + 1}px)`
+    }
+});
+
+class _MainLayout extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {open: false};
+    }
+
+    handleDrawerOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleDrawerClose = () => {
+        this.setState({open: false});
+    };
+
+    goToLink(link) {
+        this.props.history.push(link);
+    }
+
+    render() {
+        const { classes, theme } = this.props;
+        return (
+            <div className={classes.root}>
+                <CssBaseline />
+                <AppBar
+                    position="fixed"
+                    className={clsx(classes.appBar, {
+                        [classes.appBarShift]: this.state.open,
+                    })}
+                >
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={this.handleDrawerOpen}
+                            edge="start"
+                            className={clsx(classes.menuButton, {
+                                [classes.hide]: this.state.open,
+                            })}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap>
+                            Bow b4 Saptor
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    variant="permanent"
+                    className={clsx(classes.drawer, {
+                        [classes.drawerOpen]: this.state.open,
+                        [classes.drawerClose]: !this.state.open,
+                    })}
+                    classes={{
+                        paper: clsx({
+                            [classes.drawerOpen]: this.state.open,
+                            [classes.drawerClose]: !this.state.open,
+                        }),
+                    }}
+                >
+                    <div className={classes.toolbar}>
+                        <IconButton onClick={this.handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </div>
+                    <Divider />
+                    <List onSelect={item => console.log(item)}>
+                        <ListItem button key="players" onClick={this.goToLink.bind(this, '/players')}>
+                            <ListItemIcon>
+                                <PeopleIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Players" />
+                        </ListItem>
+                        <ListItem button key="doors">
+                            <ListItemIcon>
+                                <DoorIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Doors" />
+                        </ListItem>
+                        <ListItem button key="boards">
+                            <ListItemIcon>
+                                <BoardIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Boards" />
+                        </ListItem>
+                        <ListItem button key="logs">
+                            <ListItemIcon>
+                                <LogIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Logs" />
+                        </ListItem>
+                        <ListItem button key="admins">
+                            <ListItemIcon>
+                                <AdminIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Admins" />
+                        </ListItem>
+                    </List>
+                </Drawer>
+                <main
+                    className={clsx(classes.content, {
+                        [classes.contentDrawerOpen]: this.state.open,
+                        [classes.contentDrawerClosed]: !this.state.open
+                    })}
+                >
+                    <div className={classes.toolbar} />
                     <Switch>
                         <Route path="/players" component={PlayerList} />
                         <Route path="/player/:id/:tab?" component={PlayerPage} />
                     </Switch>
-                </div>
-            </Content>
-        </Layout>
-        <Footer style={{ textAlign: 'center' }}>Saptor ©2019 - All rights reserved</Footer>
-    </Layout>
+                </main>
+            </div>
+        );
+    }
+}
+
+const MainLayout = withTheme(
+    withStyles(styles)(
+        withRouter(_MainLayout)
+    )
 );
 
 export default MainLayout
