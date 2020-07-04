@@ -1,3 +1,5 @@
+import Store from '../reducers/index'
+import {store} from "../store";
 
 class HttpClient {
 
@@ -9,7 +11,8 @@ class HttpClient {
             requestInit['headers'] = {}
         }
         requestInit['headers']['Authorization'] = localStorage.getItem('JWT');
-
+        requestInit['headers']['Selected-Server-ID'] = localStorage.getItem('Selected-Server-ID')
+        
         return fetch(requestInfo, requestInit)
             .then(resp => {
                 if (resp.status === 403) {

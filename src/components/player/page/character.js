@@ -52,7 +52,7 @@ export class _CharacterTab extends React.Component {
         const { player } = this.state;
         const { classes, troops, factions, items } = this.props;
         return (
-            <form onSubmit={event => console.log(event)}>
+            <form>
                 <Grid container>
                     <Grid item xs={12}>
                         <FormControl fullWidth margin="dense">
@@ -63,7 +63,7 @@ export class _CharacterTab extends React.Component {
                                 name="name"
                                 value={player.name}
                                 onChange={this.changeFieldValue.bind(this, 'name')}
-                                aria-describedby="player-name-text"/>
+                            />
                             <FormHelperText>We'll never share your email.</FormHelperText>
                         </FormControl>
                     </Grid>
@@ -111,7 +111,6 @@ export class _CharacterTab extends React.Component {
                                 options={troops ? troops : [player.troop]}
                                 value={player.troop}
                                 getOptionLabel={troop => troop.name}
-                                disablePortal={true}
                                 onChange={this.changeSelectValue.bind(this, 'troop')}
                                 renderInput={params => <TextField {...params} />}
                             />
@@ -125,7 +124,6 @@ export class _CharacterTab extends React.Component {
                                 options={factions ? factions : [player.faction]}
                                 value={player.faction}
                                 getOptionLabel={faction => faction.name}
-                                disablePortal={true}
                                 onChange={this.changeSelectValue.bind(this, 'faction')}
                                 renderInput={params => <TextField {...params} />}
                             />
@@ -185,7 +183,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HEAD_ARMOR) : [player.headArmor]}
                                         value={player.headArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'headArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -199,7 +196,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.BODY_ARMOR) : [player.bodyArmor]}
                                         value={player.bodyArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'bodyArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -213,7 +209,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.FOOT_ARMOR) : [player.footArmor]}
                                         value={player.footArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'footArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -227,7 +222,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HAND_ARMOR) : [player.handArmor]}
                                         value={player.handArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'handArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -241,7 +235,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_0]}
                                         value={player.item_0}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'item_0')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -255,7 +248,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_1]}
                                         value={player.item_1}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'item_1')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -269,7 +261,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_2]}
                                         value={player.item_2}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'item_2')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -283,7 +274,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_3]}
                                         value={player.item_3}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'item_3')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -309,7 +299,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HORSE) : [player.horse_0]}
                                         value={player.horse_0}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'horse_0')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -323,7 +312,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HORSE) : [player.horse_1]}
                                         value={player.horse_1}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'horse_1')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -337,7 +325,6 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HORSE) : [player.horse_2]}
                                         value={player.horse_2}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
-                                        disablePortal={true}
                                         onChange={this.changeSelectValue.bind(this, 'horse_2')}
                                         renderInput={params => <TextField {...params} />}
                                     />

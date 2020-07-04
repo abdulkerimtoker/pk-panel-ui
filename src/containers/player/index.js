@@ -1,22 +1,40 @@
 import {
-    banPlayer, failFetchPlayer,
-    fetchBoardList, fetchCraftingRequests,
+    banPlayer,
+    failFetchPlayer,
+    fetchBoardList,
+    fetchCraftingRequests,
     fetchDoorList,
     fetchFactionList,
     fetchItemList,
-    fetchPlayer, fetchPlayerBans, fetchPlayerBoardAccesses,
+    fetchPlayer,
+    fetchPlayerBans,
+    fetchPlayerBoardAccesses,
     fetchPlayerDoorKeys,
-    fetchPlayerInventory, fetchPlayerProfessionAssignments, fetchProfessionList,
-    fetchTroopList, receiveBoardList, receiveCraftingRequests,
+    fetchPlayerInventory,
+    fetchPlayerProfessionAssignments,
+    fetchProfessionList,
+    fetchTroopList,
+    receiveBoardList,
+    receiveCraftingRequests,
     receiveDoorList,
     receiveFactionList,
     receiveItemList,
-    receivePlayer, receivePlayerBans, receivePlayerBoardAccesses,
+    receivePlayer,
+    receivePlayerBans,
+    receivePlayerBoardAccesses,
     receivePlayerDoorKeys,
-    receivePlayerInventory, receivePlayerProfessionAssignments, receiveProfessionList,
-    receiveTroopList, savePlayerBoardAccess, savePlayerBoardAccessSuccess,
+    receivePlayerInventory,
+    receivePlayerProfessionAssignments,
+    receiveProfessionList,
+    receiveTroopList,
+    revokePlayerDoorKeySuccess,
+    revokePlayerProfessionSuccess,
+    savePlayerBoardAccess,
+    savePlayerBoardAccessSuccess,
     savePlayerDoorKey,
-    savePlayerDoorKeySuccess, savePlayerProfessionAssignment, savePlayerProfessionAssignmentSuccess,
+    savePlayerDoorKeySuccess,
+    savePlayerProfessionAssignment,
+    savePlayerProfessionAssignmentSuccess,
     setPlayer,
     updateInventorySlot,
     updateInventorySlotSuccess,
@@ -95,8 +113,7 @@ const mapDispatchToProps = dispatch => ({
             .catch(() => alert('An error occured while trying to update the inventory slot'));
     },
 
-    saveDoorKey: (playerId, doorKey) => {
-        doorKey['player'] = {id: playerId};
+    saveDoorKey: (doorKey) => {
         dispatch(savePlayerDoorKey(doorKey));
         httpclient.fetch('/api/player/doorKey', {
             method: 'PUT',
@@ -106,16 +123,33 @@ const mapDispatchToProps = dispatch => ({
             body: JSON.stringify(doorKey)
         })
             .then(resp => {
-                if (resp.status === 200) alert('Door key successfully saved');
-                else alert('An error occured while trying to save the door key');
-                return resp.json();
+                if (resp.status === 200) {
+                    alert('Door key successfully saved');
+                    return resp.json();
+                }
+                throw 1;
             })
             .then(doorKey => dispatch(savePlayerDoorKeySuccess(doorKey)))
             .catch(() => alert('An error occured while trying to save the door key'));
     },
 
-    saveBoardAccess: (playerId, boardAccess) => {
-        boardAccess['player'] = {id: playerId};
+    revokeDoorKey: doorKeyId => {
+        httpclient.fetch('/api/doorKey/' + doorKeyId, {
+            method: 'DELETE'
+        })
+            .then(resp => {
+                if (resp.status === 200) {
+                    alert('Door key was successfully revoked');
+                    dispatch(revokePlayerDoorKeySuccess(doorKeyId));
+                }
+                else {
+                    alert('An error occured while trying to revoke the door key');
+                }
+            })
+            .catch(() => alert('An error occured while trying to revoke the door key'));
+    },
+
+    saveBoardAccess: (boardAccess) => {
         dispatch(savePlayerBoardAccess(boardAccess));
         httpclient.fetch('/api/player/boardAccess', {
             method: 'PUT',
@@ -133,8 +167,7 @@ const mapDispatchToProps = dispatch => ({
             .catch(() => alert('An error occured while trying to save the board access'));
     },
 
-    saveProfessionAssignment: (playerId, professionAssignment) => {
-        professionAssignment['player'] = {id: playerId};
+    saveProfessionAssignment: (professionAssignment) => {
         dispatch(savePlayerProfessionAssignment(professionAssignment));
         httpclient.fetch('/api/player/professionAssignment', {
             method: 'PUT',
@@ -150,6 +183,22 @@ const mapDispatchToProps = dispatch => ({
             })
             .then(professionAssignment => dispatch(savePlayerProfessionAssignmentSuccess(professionAssignment)))
             .catch(() => alert('An error occured while trying to save the profession assignment'));
+    },
+
+    revokeProfession: (playerId, professionId) => {
+        httpclient.fetch(`/api/player/${playerId}/profession/${professionId}`, {
+            method: 'DELETE'
+        })
+            .then(resp => {
+                if (resp.status === 200) {
+                    alert('Profession was successfully revoked');
+                    dispatch(revokePlayerProfessionSuccess(playerId, professionId));
+                }
+                else {
+                    alert('An error occured while trying to revoke profession');
+                }
+            })
+            .catch(() => alert('An error occured while trying to revoke profession'));
     },
 
     ban: ban => {
@@ -228,7 +277,6 @@ const mapDispatchToProps = dispatch => ({
             .then(resp => resp.json())
             .then(professionAssignments => {
                 dispatch(receivePlayerProfessionAssignments(professionAssignments));
-                console.log(JSON.stringify(professionAssignments));
             });
     },
 
@@ -247,7 +295,4 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Player);
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

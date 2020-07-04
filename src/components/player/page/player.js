@@ -10,6 +10,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import CharacterTab from "./character";
+import InventoryTab from "./inventory";
+import DoorKeysTab from "./doorKeys";
+import ProfessionsTab from "./professions";
 
 const styles = theme => ({
     tabsContainer: {
@@ -101,7 +104,7 @@ class _Player extends React.Component {
                                 <Tab label="Character" {...a11yProps(0)} />
                                 <Tab label="Inventory" {...a11yProps(1)} />
                                 <Tab label="Door Keys" {...a11yProps(2)} />
-                                <Tab label="Board Accesses" {...a11yProps(3)} />
+                                <Tab label="Professions" {...a11yProps(3)} />
                                 <Tab label="Bans" {...a11yProps(4)} />
                                 <Tab label="Crafting Requests" {...a11yProps(5)} />
                             </Tabs>
@@ -117,13 +120,35 @@ class _Player extends React.Component {
                                 />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={1}>
-                                Item Two
+                                <InventoryTab
+                                    inventory={this.props.inventory}
+                                    player={player}
+                                    items={itemList}
+                                    fetchInventory={this.props.fetchInventory}
+                                    updateInventorySlot={this.props.updateInventorySlot}
+                                />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={2}>
-                                Item Three
+                                <DoorKeysTab
+                                    doorKeys={this.props.doorKeys}
+                                    player={player}
+                                    doors={this.props.doorList}
+                                    fetchDoorList={this.props.fetchDoorList}
+                                    fetchDoorKeys={this.props.fetchDoorKeys}
+                                    saveDoorKey={this.props.saveDoorKey}
+                                    revokeDoorKey={this.props.revokeDoorKey}
+                                />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={3}>
-                                Item Four
+                                <ProfessionsTab
+                                    professions={this.props.professionList}
+                                    professionAssignments={this.props.professionAssignments}
+                                    player={player}
+                                    fetchProfessionsList={this.props.fetchProfessionList}
+                                    fetchProfessionAssignments={this.props.fetchProfessionAssignments}
+                                    saveProfessionAssignment={this.props.saveProfessionAssignment}
+                                    revokeProfession={this.props.revokeProfession}
+                                />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={4}>
                                 Item Five

@@ -32,6 +32,7 @@ export const PlayerPageActions = {
     SAVE_PLAYER_DOOR_KEY: 'REQUEST_SAVE_PLAYER_DOOR_KEY',
     SAVE_PLAYER_DOOR_KEY_SUCCESS: 'RESPONSE_SAVE_PLAYER_DOOR_KEY',
     FAIL_SAVE_PLAYER_DOOR_KEY: 'FAIL_SAVE_PLAYER_DOOR_KEY',
+    SUCCESS_REVOKE_PLAYER_DOOR_KEY: 'SUCCESS_REVOKE_PLAYER_DOOR_KEY',
 
     SAVE_PLAYER_BOARD_ACCESS: 'REQUEST_SAVE_PLAYER_BOARD_ACCESS',
     SAVE_PLAYER_BOARD_ACCESS_SUCCESS: 'RESPONSE_SAVE_PLAYER_BOARD_ACCESS',
@@ -40,6 +41,7 @@ export const PlayerPageActions = {
     SAVE_PLAYER_PROFESSION_ASSIGNMENT: 'REQUEST_PLAYER_PROFESSION_ASSIGNMENT',
     SAVE_PLAYER_PROFESSION_ASSIGNMENT_SUCCESS: 'RESPONSE_PLAYER_PROFESSION_ASSIGNMENT',
     FAIL_SAVE_PLAYER_PROFESSION_ASSIGNMENT: 'FAIL_SAVE_PLAYER_PROFESSION_ASSIGNMENT',
+    SUCCESS_REVOKE_PLAYER_PROFESSION: 'SUCCESS_REVOKE_PLAYER_PROFESSION',
 
     FETCH_TROOP_LIST: 'REQUEST_TROOP_LIST',
     RECEIVE_TROOP_LIST: 'RESPONSE_TROOP_LIST',
@@ -231,9 +233,9 @@ export const updateInventorySlotSuccess = inventorySlot => ({
     inventorySlot: inventorySlot
 });
 
-export const savePlayerDoorKey = doorKey => ({
+export const savePlayerDoorKey = details => ({
     type: PlayerPageActions.SAVE_PLAYER_DOOR_KEY,
-    doorKey: doorKey
+    details: details
 });
 
 export const savePlayerDoorKeySuccess = doorKey => ({
@@ -264,4 +266,15 @@ export const savePlayerProfessionAssignmentSuccess = professionAssignment => ({
 export const banPlayer = ban => ({
     type: PlayerPageActions.BAN,
     ban: ban
+});
+
+export const revokePlayerDoorKeySuccess = doorKeyId => ({
+    type: PlayerPageActions.SUCCESS_REVOKE_PLAYER_DOOR_KEY,
+    doorKeyId: doorKeyId
+});
+
+export const revokePlayerProfessionSuccess = (playerId, professionId) => ({
+    type: PlayerPageActions.SUCCESS_REVOKE_PLAYER_PROFESSION,
+    playerId: playerId,
+    professionId: professionId
 });

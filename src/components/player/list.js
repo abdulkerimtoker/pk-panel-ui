@@ -12,7 +12,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableFooter from "@material-ui/core/TableFooter";
 import TablePagination from "@material-ui/core/TablePagination";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
-import withRouter from "react-router-dom/es/withRouter";
+import { withRouter } from "react-router-dom";
 
 const styles = theme => ({
     row: {
@@ -43,7 +43,7 @@ class _PlayerList extends React.Component {
 
     handleSearchEnter = event => {
         let search = this.state.search;
-        console.log(event.key);
+
         if (event.key === 'Enter') {
             this.props.fetchPlayerList(search);
         }

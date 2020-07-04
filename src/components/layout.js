@@ -25,7 +25,9 @@ import PeopleIcon from '@material-ui/icons/People';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import withTheme from "@material-ui/core/styles/withTheme";
-import withRouter from "react-router-dom/es/withRouter";
+import { withRouter } from "react-router-dom";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import {TextField} from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -112,12 +114,17 @@ class _MainLayout extends React.Component {
         this.setState({open: false});
     };
 
+    handleSelectServer(event, value) {
+        this.props.selectServer(value);
+    }
+
     goToLink(link) {
         this.props.history.push(link);
     }
 
     render() {
-        const { classes, theme } = this.props;
+        const { classes, theme, serverList, selectedServer } = this.props;
+
         return (
             <div className={classes.root}>
                 <CssBaseline />
@@ -163,7 +170,15 @@ class _MainLayout extends React.Component {
                         </IconButton>
                     </div>
                     <Divider />
-                    <List onSelect={item => console.log(item)}>
+                    <Autocomplete
+                        options={serverList ? serverList : [{name: 'sea'}]}
+                        value={selectedServer}
+                        onChange={this.handleSelectServer.bind(this)}
+                        getOptionLabel={server => `${server.id} - ${server.name}`}
+                        renderInput={params => <TextField {...params} variant="standard" />}
+                    />
+                    <Divider />
+                    <List>
                         <ListItem button key="players" onClick={this.goToLink.bind(this, '/players')}>
                             <ListItemIcon>
                                 <PeopleIcon />

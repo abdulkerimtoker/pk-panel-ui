@@ -12,6 +12,7 @@ import {
     player, professionAssignments, professionList,
     troopList
 } from "./player";
+import {selectedServer, serverList} from "./server";
 
 export default combineReducers({
     playerList,
@@ -28,5 +29,7 @@ export default combineReducers({
     bans,
     craftingRequests,
     professionAssignments,
-    fetchPlayerState
+    fetchPlayerState,
+    serverList,
+    selectedServer
 });
