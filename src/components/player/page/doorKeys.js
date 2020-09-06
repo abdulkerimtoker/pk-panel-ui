@@ -63,7 +63,7 @@ export class _DoorKeysTab extends React.Component {
                                 <Autocomplete
                                     options={doors ? doors : []}
                                     value={selectedDoor}
-                                    getOptionLabel={door => `${door.id} - ${door.name}`}
+                                    getOptionLabel={door => `${door.index} - ${door.name}`}
                                     onChange={this.changeDoorValue.bind(this)}
                                     renderInput={params => <TextField {...params} variant="standard" />}
                                 />
@@ -83,20 +83,20 @@ export class _DoorKeysTab extends React.Component {
                         </Grid>
                     </Grid>
                 </form>
-                { doorKeys ?
+                {doorKeys ?
                     <TableContainer component={Paper}>
                         <Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{fontWeight: 'bolder'}}>Door</TableCell>
                                     <TableCell style={{fontWeight: 'bolder'}}>Is Owner</TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell />
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                { doorKeys.map(dk => (
+                                {doorKeys.map(dk => (
                                     <TableRow key={dk.id.toString()}>
-                                        <TableCell>{dk.door.name}</TableCell>
+                                        <TableCell>{dk.door.index + ' - ' + dk.door.name}</TableCell>
                                         <TableCell>{dk.isOwner ? 'Yes' : 'No'}</TableCell>
                                         <TableCell>
                                             <Button onClick={this.handleRevoke.bind(this, dk.id)}>
@@ -104,7 +104,7 @@ export class _DoorKeysTab extends React.Component {
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                )) }
+                                ))}
                             </TableBody>
                         </Table>
                     </TableContainer>

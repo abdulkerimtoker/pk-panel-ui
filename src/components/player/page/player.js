@@ -13,6 +13,7 @@ import CharacterTab from "./character";
 import InventoryTab from "./inventory";
 import DoorKeysTab from "./doorKeys";
 import ProfessionsTab from "./professions";
+import BansTab from "./bans";
 
 const styles = theme => ({
     tabsContainer: {
@@ -151,7 +152,13 @@ class _Player extends React.Component {
                                 />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={4}>
-                                Item Five
+                                <BansTab
+                                    bans={this.props.bans}
+                                    player={player}
+                                    fetchBans={this.props.fetchBans}
+                                    ban={this.props.ban}
+                                    undoBan={this.props.undoBan}
+                                />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={5}>
                                 Item Six

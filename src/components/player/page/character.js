@@ -1,18 +1,16 @@
 import * as React from "react";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
-import {InputLabel, Select, TextField, withStyles, withTheme} from "@material-ui/core";
+import {Container, InputLabel, TextField, withStyles, withTheme} from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Typography from "@material-ui/core/Typography";
-import MenuItem from "@material-ui/core/MenuItem";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {ItemType} from "../../../constants";
-import Divider from "@material-ui/core/Divider";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
 
@@ -52,7 +50,7 @@ export class _CharacterTab extends React.Component {
         const { player } = this.state;
         const { classes, troops, factions, items } = this.props;
         return (
-            <form>
+            <Container>
                 <Grid container>
                     <Grid item xs={12}>
                         <FormControl fullWidth margin="dense">
@@ -66,6 +64,9 @@ export class _CharacterTab extends React.Component {
                             />
                             <FormHelperText>We'll never share your email.</FormHelperText>
                         </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                        Last log time: {player.lastLogTime}
                     </Grid>
                     <Grid item xs={12}>
                         <FormControl fullWidth margin="dense">
@@ -111,6 +112,7 @@ export class _CharacterTab extends React.Component {
                                 options={troops ? troops : [player.troop]}
                                 value={player.troop}
                                 getOptionLabel={troop => troop.name}
+                                getOptionSelected={(option, value) => option.id === value.id}
                                 onChange={this.changeSelectValue.bind(this, 'troop')}
                                 renderInput={params => <TextField {...params} />}
                             />
@@ -124,6 +126,7 @@ export class _CharacterTab extends React.Component {
                                 options={factions ? factions : [player.faction]}
                                 value={player.faction}
                                 getOptionLabel={faction => faction.name}
+                                getOptionSelected={(option, value) => option.id === value.id}
                                 onChange={this.changeSelectValue.bind(this, 'faction')}
                                 renderInput={params => <TextField {...params} />}
                             />
@@ -167,13 +170,13 @@ export class _CharacterTab extends React.Component {
                     </Grid>
                 </Grid>
 
-                <ExpansionPanel className={classes.firstExpansion}>
-                    <ExpansionPanelSummary
+                <Accordion className={classes.firstExpansion}>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography>Items</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         <Grid container>
                             <Grid item xs={12}>
                                 <FormControl fullWidth margin="dense">
@@ -183,6 +186,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HEAD_ARMOR) : [player.headArmor]}
                                         value={player.headArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'headArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -196,6 +200,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.BODY_ARMOR) : [player.bodyArmor]}
                                         value={player.bodyArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'bodyArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -209,6 +214,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.FOOT_ARMOR) : [player.footArmor]}
                                         value={player.footArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'footArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -222,6 +228,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HAND_ARMOR) : [player.handArmor]}
                                         value={player.handArmor}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'handArmor')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -235,6 +242,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_0]}
                                         value={player.item_0}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'item_0')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -248,6 +256,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_1]}
                                         value={player.item_1}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'item_1')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -261,6 +270,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_2]}
                                         value={player.item_2}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'item_2')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -274,22 +284,23 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.ITEM) : [player.item_3]}
                                         value={player.item_3}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'item_3')}
                                         renderInput={params => <TextField {...params} />}
                                     />
                                 </FormControl>
                             </Grid>
                         </Grid>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
 
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
+                <Accordion>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                     >
                         <Typography>Horses</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
+                    </AccordionSummary>
+                    <AccordionDetails>
                         <Grid container>
                             <Grid item xs={12}>
                                 <FormControl fullWidth margin="dense">
@@ -299,6 +310,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HORSE) : [player.horse_0]}
                                         value={player.horse_0}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'horse_0')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -312,6 +324,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HORSE) : [player.horse_1]}
                                         value={player.horse_1}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'horse_1')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -325,6 +338,7 @@ export class _CharacterTab extends React.Component {
                                         options={items ? items.filter(i => i.type.id === ItemType.HORSE) : [player.horse_2]}
                                         value={player.horse_2}
                                         getOptionLabel={item => `${item.id} - ${item.name}`}
+                                        getOptionSelected={(option, value) => option.id === value.id}
                                         onChange={this.changeSelectValue.bind(this, 'horse_2')}
                                         renderInput={params => <TextField {...params} />}
                                     />
@@ -343,14 +357,14 @@ export class _CharacterTab extends React.Component {
                                 </FormControl>
                             </Grid>
                         </Grid>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
+                    </AccordionDetails>
+                </Accordion>
                 <Button variant="contained"
                         color="primary"
                         onClick={this.props.updatePlayer.bind(this, player)}>
                     Save Changes
                 </Button>
-            </form>
+            </Container>
         );
     }
 }

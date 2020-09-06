@@ -28,6 +28,14 @@ import withTheme from "@material-ui/core/styles/withTheme";
 import { withRouter } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {TextField} from "@material-ui/core";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs-websocket";
+import ServerPage from "../containers/server/server";
+import Button from "@material-ui/core/Button";
+import LogsPage from "../containers/logs/logs";
+import httpclient from "../utils/httpclient";
+import CraftingStationList from "../containers/crafting/list";
+import CraftingStationPage from "../containers/crafting";
 
 const drawerWidth = 240;
 
@@ -51,7 +59,7 @@ const styles = theme => ({
         }),
     },
     menuButton: {
-        marginRight: 36,
+        marginRight: 36
     },
     hide: {
         display: 'none',
@@ -122,8 +130,19 @@ class _MainLayout extends React.Component {
         this.props.history.push(link);
     }
 
+    logOut() {
+        httpclient.fetch('/api/logout');
+        localStorage.removeItem('JWT');
+        localStorage.removeItem('Selected-Server-ID');
+        window.location.href = '/';
+    }
+
     render() {
-        const { classes, theme, serverList, selectedServer } = this.props;
+        const {
+            classes, theme,
+            serverList, selectedServer,
+            authorities
+        } = this.props;
 
         return (
             <div className={classes.root}>
@@ -147,7 +166,7 @@ class _MainLayout extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" noWrap>
-                            Bow b4 Saptor
+                            Saptor Panel
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -171,45 +190,70 @@ class _MainLayout extends React.Component {
                     </div>
                     <Divider />
                     <Autocomplete
-                        options={serverList ? serverList : [{name: 'sea'}]}
+                        options={serverList ? serverList : []}
                         value={selectedServer}
                         onChange={this.handleSelectServer.bind(this)}
                         getOptionLabel={server => `${server.id} - ${server.name}`}
                         renderInput={params => <TextField {...params} variant="standard" />}
                     />
                     <Divider />
-                    <List>
-                        <ListItem button key="players" onClick={this.goToLink.bind(this, '/players')}>
-                            <ListItemIcon>
-                                <PeopleIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Players" />
-                        </ListItem>
-                        <ListItem button key="doors">
-                            <ListItemIcon>
-                                <DoorIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Doors" />
-                        </ListItem>
-                        <ListItem button key="boards">
-                            <ListItemIcon>
-                                <BoardIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Boards" />
-                        </ListItem>
-                        <ListItem button key="logs">
-                            <ListItemIcon>
-                                <LogIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Logs" />
-                        </ListItem>
-                        <ListItem button key="admins">
-                            <ListItemIcon>
-                                <AdminIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Admins" />
-                        </ListItem>
-                    </List>
+                    {selectedServer ? (
+                        <List>
+                            {authorities.includes(`ROLE_${selectedServer.id}_PLAYER_MANAGER`) &&
+                            <ListItem button key="players" onClick={this.goToLink.bind(this, '/players')}>
+                                <ListItemIcon>
+                                    <PeopleIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Players" />
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_DOOR_MANAGER`) &&
+                            <ListItem button key="doors">
+                                <ListItemIcon>
+                                    <DoorIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Doors"/>
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_CRAFTING_MANAGER`) &&
+                            <ListItem button key="craftingStations"
+                                      onClick={this.goToLink.bind(this, '/craftingStations')}>
+                                <ListItemIcon>
+                                    <BoardIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Crafting Stations"/>
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_LOG_CHECKER`) &&
+                            <ListItem button key="logs" onClick={this.goToLink.bind(this, '/logs')}>
+                                <ListItemIcon>
+                                    <LogIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Logs"/>
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_ADMIN_MANAGER`) &&
+                            <ListItem button key="admins">
+                                <ListItemIcon>
+                                    <AdminIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Admins"/>
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_SERVER_MANAGER`) &&
+                            <ListItem button key="server" onClick={this.goToLink.bind(this, '/server')}>
+                                <ListItemIcon>
+                                    <AdminIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Server"/>
+                            </ListItem>
+                            }
+                        </List>
+                    ) : 'Select a Server'}
+                    <Divider/>
+                    <ListItem button key="logout" onClick={this.logOut.bind(this)}>
+                        <ListItemText primary="Log out"/>
+                    </ListItem>
                 </Drawer>
                 <main
                     className={clsx(classes.content, {
@@ -218,10 +262,16 @@ class _MainLayout extends React.Component {
                     })}
                 >
                     <div className={classes.toolbar} />
+                    {selectedServer &&
                     <Switch>
                         <Route path="/players" component={PlayerList} />
                         <Route path="/player/:id/:tab?" component={PlayerPage} />
+                        <Route path="/server" component={ServerPage} />
+                        <Route path="/logs" component={LogsPage} />
+                        <Route path="/craftingStations" component={CraftingStationList} />
+                        <Route path="/craftingStation/:id" component={CraftingStationPage} />
                     </Switch>
+                    }
                 </main>
             </div>
         );

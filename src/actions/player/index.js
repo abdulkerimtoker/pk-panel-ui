@@ -75,9 +75,8 @@ export const PlayerPageActions = {
     RECEIVE_CRAFTING_REQUESTS: "RECEIVE_PLAYER_CRAFTING_REQUESTS",
     FAIL_FETCH_CRAFTING_REQUESTS: 'FAIL_FETCH_CRAFTING_REQUESTS',
 
-    BAN: 'REQUEST_BAN',
     SUCCESS_BAN: 'RESPONSE_BAN',
-    FAIL_BAN: 'FAIL_BAN',
+    SUCCESS_UNDO_BAN: 'RESPONSE_UNDO_BAN'
 };
 
 export const fetchPlayer = id => ({
@@ -263,8 +262,13 @@ export const savePlayerProfessionAssignmentSuccess = professionAssignment => ({
     professionAssignment: professionAssignment
 });
 
-export const banPlayer = ban => ({
-    type: PlayerPageActions.BAN,
+export const banPlayerSuccess = ban => ({
+    type: PlayerPageActions.SUCCESS_BAN,
+    ban: ban
+});
+
+export const undoBanSuccess = ban => ({
+    type: PlayerPageActions.SUCCESS_UNDO_BAN,
     ban: ban
 });
 

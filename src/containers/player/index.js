@@ -1,5 +1,5 @@
 import {
-    banPlayer,
+    banPlayer, banPlayerSuccess,
     failFetchPlayer,
     fetchBoardList,
     fetchCraftingRequests,
@@ -35,7 +35,7 @@ import {
     savePlayerDoorKeySuccess,
     savePlayerProfessionAssignment,
     savePlayerProfessionAssignmentSuccess,
-    setPlayer,
+    setPlayer, undoBanSuccess,
     updateInventorySlot,
     updateInventorySlotSuccess,
     updatePlayer,
@@ -95,9 +95,8 @@ const mapDispatchToProps = dispatch => ({
     },
 
     updateInventorySlot: (inventoryId, inventorySlot) => {
-        inventorySlot['inventory'] = {id: inventoryId};
         dispatch(updateInventorySlot(inventorySlot));
-        httpclient.fetch('/api/player/inventory/slot', {
+        httpclient.fetch(`/api/inventory/${inventoryId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -202,10 +201,22 @@ const mapDispatchToProps = dispatch => ({
     },
 
     ban: ban => {
-        dispatch(banPlayer(ban));
-        httpclient.fetch('/api/ban', {
-            method: 'POST'
+        httpclient.fetch('/api/bans', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(ban)
         })
+            .then(resp => resp.json())
+            .then(ban => dispatch(banPlayerSuccess(ban)))
+            .catch(() => alert('An error occured while trying to ban the player'));
+    },
+
+    undoBan: banId => {
+        httpclient.fetch(`/api/bans/${banId}/undo`, {
+            method: 'PUT'
+        })
+            .then(resp => resp.json())
+            .then(ban => dispatch(undoBanSuccess(ban)));
     },
 
     fetchTroopList: () => {
@@ -247,14 +258,16 @@ const mapDispatchToProps = dispatch => ({
         dispatch(fetchProfessionList());
         httpclient.fetch('/api/profession')
             .then(resp => resp.json())
-            .then(professionList => dispatch(receiveProfessionList(professionList)));
+            .then(professionList => dispatch(receiveProfessionList(professionList)))
+            .catch(ex => console.log(ex));
     },
 
     fetchInventory: (id) => {
         dispatch(fetchPlayerInventory(id));
         httpclient.fetch('/api/player/' + id + '/inventory')
             .then(resp => resp.json())
-            .then(inventory => dispatch(receivePlayerInventory(inventory)));
+            .then(inventory => dispatch(receivePlayerInventory(inventory)))
+            .catch(ex => console.log(ex));
     },
 
     fetchDoorKeys: (id) => {
@@ -280,9 +293,8 @@ const mapDispatchToProps = dispatch => ({
             });
     },
 
-    fetchBans: (uniqueId) => {
-        dispatch(fetchPlayerBans(uniqueId));
-        httpclient.fetch('/api/bans/player/' + uniqueId)
+    fetchBans: (playerId) => {
+        httpclient.fetch(`/api/players/${playerId}/bans`)
             .then(resp => resp.json())
             .then(bans => dispatch(receivePlayerBans(bans)));
     },

@@ -72,6 +72,11 @@ export const bans = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_BANS:
             return action.bans;
+        case PlayerPageActions.SUCCESS_BAN:
+            return [...state, action.ban];
+        case PlayerPageActions.SUCCESS_UNDO_BAN:
+            state.forEach(b => { if (b.id === action.ban.id) b.undone = true; });
+            return [...state];
     }
     return state;
 };

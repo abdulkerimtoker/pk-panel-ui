@@ -1,7 +1,6 @@
 import React from 'react';
 import httpclient from "../utils/httpclient";
 import MainLayout from "../containers/layout";
-import { store } from "../store";
 
 class App extends React.Component {
 
@@ -14,8 +13,10 @@ class App extends React.Component {
         else if (!localStorage.getItem('JWT')) {
             httpclient.steamLogin();
         }
-
-        this.props.fetchServerList();
+        else {
+            this.props.fetchServerList();
+            this.props.fetchAuthorities();
+        }
     }
 
     render() {

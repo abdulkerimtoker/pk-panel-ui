@@ -73,6 +73,7 @@ class _PlayerList extends React.Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{fontWeight: 'bolder'}}>ID</TableCell>
+                                <TableCell style={{fontWeight: 'bolder'}}>GUID</TableCell>
                                 <TableCell style={{fontWeight: 'bolder'}}>Name</TableCell>
                                 <TableCell style={{fontWeight: 'bolder'}}>Faction</TableCell>
                                 <TableCell style={{fontWeight: 'bolder'}}>Troop</TableCell>
@@ -88,6 +89,7 @@ class _PlayerList extends React.Component {
                                         onClick={this.managePlayer.bind(this, player)}
                                     >
                                         <TableCell>{player.id}</TableCell>
+                                        <TableCell>{player.uniqueId}</TableCell>
                                         <TableCell>{player.name}</TableCell>
                                         <TableCell>{player.faction.name}</TableCell>
                                         <TableCell>{player.troop.name}</TableCell>
