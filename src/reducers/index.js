@@ -8,7 +8,7 @@ import {
     doorList,
     factionList, fetchPlayerState,
     inventory,
-    itemList,
+    itemList, languageProficiencies, languages,
     player, professionAssignments, professionList,
     troopList
 } from "./player";
@@ -48,5 +48,7 @@ export default combineReducers({
     craftingRecipes,
     craftingStationInstances,
     items,
-    professions
+    professions,
+    languages,
+    languageProficiencies
 });

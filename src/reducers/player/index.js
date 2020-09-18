@@ -155,3 +155,19 @@ export const fetchPlayerState = (state = FetchPlayerStates.NOT_FETCHED, action) 
     }
     return state;
 };
+
+export const languages = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_LANGUAGES:
+            return action.languages;
+    }
+    return state;
+};
+
+export const languageProficiencies = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_LANGUAGE_PROFICIENCIES:
+            return action.languageProficiencies;
+    }
+    return state;
+};

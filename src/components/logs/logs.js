@@ -92,13 +92,13 @@ export class _LogsPage extends React.Component {
                             <ListItemIcon>
                                 <FiberManualRecordIcon fontSize="small" />
                             </ListItemIcon>
-                            <ListItemText primary="Each word should contain a minimum of 3 characters" />
+                            <ListItemText primary="Each word should contain a minimum of 3 and maximum of 128 characters" />
                         </ListItem>
                         <ListItem>
                             <ListItemIcon>
                                 <FiberManualRecordIcon fontSize="small" />
                             </ListItemIcon>
-                            <ListItemText primary="Words may contain : a-z, A-Z, 0-9, []-_ and space (Must match RegEx: [\w _\-\[\]]{3,})" />
+                            <ListItemText primary="Words may contain : a-z, A-Z, 0-9, []()-_: and space (Must match RegEx: [\w _\-\[\]:()]{3,128})" />
                         </ListItem>
                         <ListItem>
                             <ListItemIcon>

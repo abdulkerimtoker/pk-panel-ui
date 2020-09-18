@@ -14,6 +14,7 @@ import InventoryTab from "./inventory";
 import DoorKeysTab from "./doorKeys";
 import ProfessionsTab from "./professions";
 import BansTab from "./bans";
+import LanguagesTab from "./languages";
 
 const styles = theme => ({
     tabsContainer: {
@@ -107,7 +108,7 @@ class _Player extends React.Component {
                                 <Tab label="Door Keys" {...a11yProps(2)} />
                                 <Tab label="Professions" {...a11yProps(3)} />
                                 <Tab label="Bans" {...a11yProps(4)} />
-                                <Tab label="Crafting Requests" {...a11yProps(5)} />
+                                <Tab label="Languages" {...a11yProps(5)} />
                             </Tabs>
                         </AppBar>
                         <Container component={Paper} className={classes.tabsContainer}>
@@ -161,7 +162,15 @@ class _Player extends React.Component {
                                 />
                             </TabPanel>
                             <TabPanel value={tabIndex} index={5}>
-                                Item Six
+                                <LanguagesTab
+                                    player={player}
+                                    languages={this.props.languages}
+                                    languageProficiencies={this.props.languageProficiencies}
+                                    fetchLanguages={this.props.fetchLanguages}
+                                    fetchLanguageProficiencies={this.props.fetchLanguageProficiencies}
+                                    assignLanguageProficiency={this.props.assignLanguageProficiency}
+                                    revokeLanguageProficiency={this.props.revokeLanguageProficiency}
+                                />
                             </TabPanel>
                         </Container>
                     </div>

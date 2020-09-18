@@ -1,5 +1,5 @@
 import {
-    banPlayer, banPlayerSuccess,
+    banPlayerSuccess,
     failFetchPlayer,
     fetchBoardList,
     fetchCraftingRequests,
@@ -7,7 +7,6 @@ import {
     fetchFactionList,
     fetchItemList,
     fetchPlayer,
-    fetchPlayerBans,
     fetchPlayerBoardAccesses,
     fetchPlayerDoorKeys,
     fetchPlayerInventory,
@@ -19,6 +18,8 @@ import {
     receiveDoorList,
     receiveFactionList,
     receiveItemList,
+    receiveLanguageProficiencies,
+    receiveLanguages,
     receivePlayer,
     receivePlayerBans,
     receivePlayerBoardAccesses,
@@ -35,7 +36,8 @@ import {
     savePlayerDoorKeySuccess,
     savePlayerProfessionAssignment,
     savePlayerProfessionAssignmentSuccess,
-    setPlayer, undoBanSuccess,
+    setPlayer,
+    undoBanSuccess,
     updateInventorySlot,
     updateInventorySlotSuccess,
     updatePlayer,
@@ -43,7 +45,7 @@ import {
 } from "../../actions/player";
 import {connect} from "react-redux";
 import Player from "../../components/player/page/player";
-import {craftingRequests} from "../../reducers/player";
+import {craftingRequests, languageProficiencies, languages} from "../../reducers/player";
 import httpclient from "../../utils/httpclient";
 
 const mapStateToProps = state => ({
@@ -60,7 +62,9 @@ const mapStateToProps = state => ({
     professionAssignments: state.professionAssignments,
     bans: state.bans,
     craftingRequests: state.craftingRequests,
-    fetchPlayerState: state.fetchPlayerState
+    fetchPlayerState: state.fetchPlayerState,
+    languages: state.languages,
+    languageProficiencies: state.languageProficiencies
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -304,7 +308,33 @@ const mapDispatchToProps = dispatch => ({
         httpclient.fetch('/api/player/' + id + '/craftingRequests')
             .then(resp => resp.json())
             .then(craftingRequests => dispatch(receiveCraftingRequests(craftingRequests)));
-    }
+    },
+
+    fetchLanguages: () => {
+        httpclient.fetch('/api/languages')
+            .then(resp => resp.json())
+            .then(languages => dispatch(receiveLanguages(languages)));
+        console.log('fetchlang');
+    },
+
+    fetchLanguageProficiencies: playerId => {
+        httpclient.fetch(`/api/player/${playerId}/languageProficiencies`)
+            .then(resp => resp.json())
+            .then(languageProficiencies => dispatch(receiveLanguageProficiencies(languageProficiencies)));
+        console.log('fetchlangppp');
+    },
+
+    assignLanguageProficiency: (playerId, languageId) => {
+        httpclient.fetch(`/api/player/${playerId}/languageProficiencies/${languageId}`, {method: 'POST'})
+            .then(resp => resp.json())
+            .then(languageProficiencies => dispatch(receiveLanguageProficiencies(languageProficiencies)));
+    },
+
+    revokeLanguageProficiency: (playerId, languageId) => {
+        httpclient.fetch(`/api/player/${playerId}/languageProficiencies/${languageId}`, {method: 'DELETE'})
+            .then(resp => resp.json())
+            .then(languageProficiencies => dispatch(receiveLanguageProficiencies(languageProficiencies)));
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

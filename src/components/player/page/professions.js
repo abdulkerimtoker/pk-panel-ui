@@ -102,7 +102,7 @@ export class _ProfessionsTab extends React.Component {
                                 <TableRow>
                                     <TableCell style={{fontWeight: 'bolder'}}>Profession</TableCell>
                                     <TableCell style={{fontWeight: 'bolder'}}>Tier</TableCell>
-                                    <TableCell></TableCell>
+                                    <TableCell/>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

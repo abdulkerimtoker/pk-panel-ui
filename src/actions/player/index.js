@@ -76,7 +76,10 @@ export const PlayerPageActions = {
     FAIL_FETCH_CRAFTING_REQUESTS: 'FAIL_FETCH_CRAFTING_REQUESTS',
 
     SUCCESS_BAN: 'RESPONSE_BAN',
-    SUCCESS_UNDO_BAN: 'RESPONSE_UNDO_BAN'
+    SUCCESS_UNDO_BAN: 'RESPONSE_UNDO_BAN',
+
+    RECEIVE_LANGUAGES: 'REQUEST_LANGUAGES',
+    RECEIVE_LANGUAGE_PROFICIENCIES: 'REQUEST_LANGUAGE_PROFICIENCIES'
 };
 
 export const fetchPlayer = id => ({
@@ -281,4 +284,14 @@ export const revokePlayerProfessionSuccess = (playerId, professionId) => ({
     type: PlayerPageActions.SUCCESS_REVOKE_PLAYER_PROFESSION,
     playerId: playerId,
     professionId: professionId
+});
+
+export const receiveLanguages = languages => ({
+    type: PlayerPageActions.RECEIVE_LANGUAGES,
+    languages: languages
+});
+
+export const receiveLanguageProficiencies = languageProficiencies => ({
+    type: PlayerPageActions.RECEIVE_LANGUAGE_PROFICIENCIES,
+    languageProficiencies: languageProficiencies
 });
