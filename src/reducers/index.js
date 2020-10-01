@@ -21,6 +21,8 @@ import {
     items,
     professions
 } from "./crafting";
+import {adminList, invitation} from "./admin/list";
+import {admin, assignedAuthorities, authorityList, ranks} from "./admin";
 
 export default combineReducers({
     playerList,
@@ -50,5 +52,11 @@ export default combineReducers({
     items,
     professions,
     languages,
-    languageProficiencies
+    languageProficiencies,
+    adminList,
+    admin,
+    ranks,
+    authorityList,
+    assignedAuthorities,
+    invitation
 });

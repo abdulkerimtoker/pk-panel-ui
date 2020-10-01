@@ -27,7 +27,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import withTheme from "@material-ui/core/styles/withTheme";
 import { withRouter } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {TextField} from "@material-ui/core";
+import {FormControl, Grid, Input, Paper, TextField} from "@material-ui/core";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs-websocket";
 import ServerPage from "../containers/server/server";
@@ -36,6 +36,9 @@ import LogsPage from "../containers/logs/logs";
 import httpclient from "../utils/httpclient";
 import CraftingStationList from "../containers/crafting/list";
 import CraftingStationPage from "../containers/crafting";
+import AdminList from "../containers/admin/list";
+import AdminPage from "../containers/admin";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const drawerWidth = 240;
 
@@ -111,7 +114,7 @@ class _MainLayout extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {open: false};
+        this.state = {open: false, invitationCode: ''};
     }
 
     handleDrawerOpen = () => {
@@ -124,6 +127,18 @@ class _MainLayout extends React.Component {
 
     handleSelectServer(event, value) {
         this.props.selectServer(value);
+    }
+
+    handleChangeInvitationCode(event) {
+        this.setState({invitationCode: event.target.value});
+    }
+
+    handleUseInvitationCode() {
+        httpclient.fetch(`/api/invitation/${this.state.invitationCode}`, {method: 'PUT'})
+            .then(resp => {
+                if (resp.status === 200) alert("You've successfully used the invitation code. You will be re-logged for the change to take effect.");
+                else alert('The invitation code is invalid.');
+            });
     }
 
     goToLink(link) {
@@ -233,7 +248,7 @@ class _MainLayout extends React.Component {
                             </ListItem>
                             }
                             {authorities.includes(`ROLE_${selectedServer.id}_ADMIN_MANAGER`) &&
-                            <ListItem button key="admins">
+                            <ListItem button key="admins" onClick={this.goToLink.bind(this, '/admins')}>
                                 <ListItemIcon>
                                     <AdminIcon/>
                                 </ListItemIcon>
@@ -262,15 +277,41 @@ class _MainLayout extends React.Component {
                     })}
                 >
                     <div className={classes.toolbar} />
-                    {selectedServer &&
-                    <Switch>
-                        <Route path="/players" component={PlayerList} />
-                        <Route path="/player/:id/:tab?" component={PlayerPage} />
-                        <Route path="/server" component={ServerPage} />
-                        <Route path="/logs" component={LogsPage} />
-                        <Route path="/craftingStations" component={CraftingStationList} />
-                        <Route path="/craftingStation/:id" component={CraftingStationPage} />
-                    </Switch>
+                    {selectedServer ?
+                        <Switch>
+                            <Route path="/players" component={PlayerList} />
+                            <Route path="/player/:id/:tab?" component={PlayerPage} />
+                            <Route path="/server" component={ServerPage} />
+                            <Route path="/logs" component={LogsPage} />
+                            <Route path="/craftingStations" component={CraftingStationList} />
+                            <Route path="/craftingStation/:id" component={CraftingStationPage} />
+                            <Route path="/admins" component={AdminList} />
+                            <Route path="/admin/:id" component={AdminPage} />
+                        </Switch>
+                        :
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <h3>Use Invitation</h3>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControl>
+                                    <InputLabel htmlFor="invitation-code">
+                                        Code
+                                    </InputLabel>
+                                    <Input
+                                        id="invitation-code"
+                                        value={this.state.invitationCode}
+                                        onChange={this.handleChangeInvitationCode.bind(this)}
+                                    />
+                                </FormControl>
+                                <Button
+                                    variant="contained" color="primary"
+                                    onClick={this.handleUseInvitationCode.bind(this)}
+                                >
+                                    Use
+                                </Button>
+                            </Grid>
+                        </Grid>
                     }
                 </main>
             </div>
@@ -278,10 +319,6 @@ class _MainLayout extends React.Component {
     }
 }
 
-const MainLayout = withTheme(
-    withStyles(styles)(
-        withRouter(_MainLayout)
-    )
-);
+const MainLayout = withTheme(withStyles(styles)(withRouter(_MainLayout)));
 
 export default MainLayout
