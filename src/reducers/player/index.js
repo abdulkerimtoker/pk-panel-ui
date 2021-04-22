@@ -34,7 +34,7 @@ export const inventory = (state = null, action) => {
     return state;
 };
 
-export const doorKeys = (state = null, action) => {
+export const playerDoorKeys = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_PLAYER_DOOR_KEYS:
             return action.doorKeys;
@@ -168,6 +168,14 @@ export const languageProficiencies = (state = null, action) => {
     switch (action.type) {
         case PlayerPageActions.RECEIVE_LANGUAGE_PROFICIENCIES:
             return action.languageProficiencies;
+    }
+    return state;
+};
+
+export const altAccounts = (state = null, action) => {
+    switch (action.type) {
+        case PlayerPageActions.RECEIVE_ALT_ACCOUNTS:
+            return action.altAccounts;
     }
     return state;
 };

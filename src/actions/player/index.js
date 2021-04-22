@@ -1,3 +1,5 @@
+import altAccounts from "../../components/player/page/altAccounts";
+
 export const PlayerPageActions = {
     FETCH_PLAYER: 'REQUEST_FETCH_PLAYER',
     RECEIVE_PLAYER: 'RESPONSE_FETCH_PLAYER',
@@ -79,7 +81,9 @@ export const PlayerPageActions = {
     SUCCESS_UNDO_BAN: 'RESPONSE_UNDO_BAN',
 
     RECEIVE_LANGUAGES: 'REQUEST_LANGUAGES',
-    RECEIVE_LANGUAGE_PROFICIENCIES: 'REQUEST_LANGUAGE_PROFICIENCIES'
+    RECEIVE_LANGUAGE_PROFICIENCIES: 'REQUEST_LANGUAGE_PROFICIENCIES',
+
+    RECEIVE_ALT_ACCOUNTS: 'RECEIVE_ALT_ACCOUNTS'
 };
 
 export const fetchPlayer = id => ({
@@ -294,4 +298,9 @@ export const receiveLanguages = languages => ({
 export const receiveLanguageProficiencies = languageProficiencies => ({
     type: PlayerPageActions.RECEIVE_LANGUAGE_PROFICIENCIES,
     languageProficiencies: languageProficiencies
+});
+
+export const receiveAltAccounts = altAccounts => ({
+    type: PlayerPageActions.RECEIVE_ALT_ACCOUNTS,
+    altAccounts: altAccounts
 });

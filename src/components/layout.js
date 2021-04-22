@@ -39,6 +39,10 @@ import CraftingStationPage from "../containers/crafting";
 import AdminList from "../containers/admin/list";
 import AdminPage from "../containers/admin";
 import InputLabel from "@material-ui/core/InputLabel";
+import DoorList from "./door/list";
+import DoorPage from "./door";
+import BoardList from "./board/list";
+import BoardPage from "./board";
 
 const drawerWidth = 240;
 
@@ -223,11 +227,19 @@ class _MainLayout extends React.Component {
                             </ListItem>
                             }
                             {authorities.includes(`ROLE_${selectedServer.id}_DOOR_MANAGER`) &&
-                            <ListItem button key="doors">
+                            <ListItem button key="doors" onClick={this.goToLink.bind(this, '/doors')}>
                                 <ListItemIcon>
                                     <DoorIcon/>
                                 </ListItemIcon>
                                 <ListItemText primary="Doors"/>
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_BOARD_MANAGER`) &&
+                            <ListItem button key="doors" onClick={this.goToLink.bind(this, '/boards')}>
+                                <ListItemIcon>
+                                    <DoorIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Boards"/>
                             </ListItem>
                             }
                             {authorities.includes(`ROLE_${selectedServer.id}_CRAFTING_MANAGER`) &&
@@ -287,6 +299,10 @@ class _MainLayout extends React.Component {
                             <Route path="/craftingStation/:id" component={CraftingStationPage} />
                             <Route path="/admins" component={AdminList} />
                             <Route path="/admin/:id" component={AdminPage} />
+                            <Route path="/doors" component={DoorList} />
+                            <Route path="/door/:doorId" component={DoorPage} />
+                            <Route path="/boards" component={BoardList} />
+                            <Route path="/board/:boardId" component={BoardPage} />
                         </Switch>
                         :
                         <Grid container>

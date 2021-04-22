@@ -55,7 +55,7 @@ const mapStateToProps = state => ({
     itemList: state.itemList,
     doorList: state.doorList,
     inventory: state.inventory,
-    doorKeys: state.doorKeys,
+    doorKeys: state.playerDoorKeys,
     boardList: state.boardList,
     professionList: state.professionList,
     boardAccesses: state.boardAccesses,

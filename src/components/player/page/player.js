@@ -15,6 +15,8 @@ import DoorKeysTab from "./doorKeys";
 import ProfessionsTab from "./professions";
 import BansTab from "./bans";
 import LanguagesTab from "./languages";
+import CraftingRequestList from "./craftingRequestList";
+import AltAccountsList from "./altAccounts";
 
 const styles = theme => ({
     tabsContainer: {
@@ -109,6 +111,8 @@ class _Player extends React.Component {
                                 <Tab label="Professions" {...a11yProps(3)} />
                                 <Tab label="Bans" {...a11yProps(4)} />
                                 <Tab label="Languages" {...a11yProps(5)} />
+                                <Tab label="Crafting" {...a11yProps(6)} />
+                                <Tab label="Alt Accounts" {...a11yProps(7)} />
                             </Tabs>
                         </AppBar>
                         <Container component={Paper} className={classes.tabsContainer}>
@@ -171,6 +175,12 @@ class _Player extends React.Component {
                                     assignLanguageProficiency={this.props.assignLanguageProficiency}
                                     revokeLanguageProficiency={this.props.revokeLanguageProficiency}
                                 />
+                            </TabPanel>
+                            <TabPanel value={tabIndex} index={6}>
+                                <CraftingRequestList playerId={player.id} />
+                            </TabPanel>
+                            <TabPanel value={tabIndex} index={7}>
+                                <AltAccountsList guid={player.uniqueId} />
                             </TabPanel>
                         </Container>
                     </div>

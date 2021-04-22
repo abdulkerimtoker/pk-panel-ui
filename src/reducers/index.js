@@ -1,10 +1,11 @@
 import {combineReducers} from "redux";
 import { playerList } from "./player/list"
 import {
+    altAccounts,
     bans,
     boardAccesses,
     boardList, craftingRequests,
-    doorKeys,
+    playerDoorKeys,
     doorList,
     factionList, fetchPlayerState,
     inventory,
@@ -23,6 +24,8 @@ import {
 } from "./crafting";
 import {adminList, invitation} from "./admin/list";
 import {admin, assignedAuthorities, authorityList, ranks} from "./admin";
+import {door, doorKeys, doors} from "./door";
+import {board, boardAccessList, boards} from "./board";
 
 export default combineReducers({
     playerList,
@@ -32,7 +35,7 @@ export default combineReducers({
     itemList,
     inventory,
     doorList,
-    doorKeys,
+    playerDoorKeys,
     boardList,
     professionList,
     boardAccesses,
@@ -53,10 +56,17 @@ export default combineReducers({
     professions,
     languages,
     languageProficiencies,
+    altAccounts,
     adminList,
     admin,
     ranks,
     authorityList,
     assignedAuthorities,
-    invitation
+    invitation,
+    door,
+    doors,
+    doorKeys,
+    board,
+    boards,
+    boardAccessList
 });
