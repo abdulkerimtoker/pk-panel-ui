@@ -3,8 +3,8 @@ export const ServerActions = {
     SUCCESS_RECEIVE_SERVER_LIST: 'SUCCESS_RECEIVE_SERVER_LIST',
     SUCCESS_SELECT_SERVER: 'SUCCESS_SELECT_SERVER',
     SUCCESS_RECEIVE_AUTHORITIES: 'SUCCESS_RECEIVE_AUTHORITIES',
-
-    SUCCESS_RECEIVE_LOG_FILES: 'SUCCESS_RECEIVE_LOG_FILES'
+    SUCCESS_RECEIVE_LOG_FILES: 'SUCCESS_RECEIVE_LOG_FILES',
+    SUCCESS_RECEIVE_STARTUP_COMMANDS: 'SUCCESS_RECEIVE_STARTUP_COMMANDS'
 };
 
 export const receiveServer = server => ({
@@ -30,4 +30,9 @@ export const receiveAuthorities = authorities => ({
 export const receiveLogFiles = logFiles => ({
     type: ServerActions.SUCCESS_RECEIVE_LOG_FILES,
     logFiles: logFiles
+});
+
+export const receiveStartupCommands = startupCommands => ({
+    type: ServerActions.SUCCESS_RECEIVE_STARTUP_COMMANDS,
+    startupCommands: startupCommands
 });

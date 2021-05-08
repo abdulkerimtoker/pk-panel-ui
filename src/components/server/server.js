@@ -4,7 +4,7 @@ import {
     Paper,
     Table,
     TableBody,
-    TableContainer,
+    TableContainer, TableFooter,
     TableHead,
     TableRow,
     withStyles,
@@ -35,12 +35,17 @@ export class _ServerPage extends React.Component {
         super(props);
         this.state = {
             serverStatus: ServerStatus.UNKNOWN,
-            map: null
+            map: null,
+            moduleFile: null,
+            startupCommands: null,
+            commandToCreate: '',
+            commandValueToCreate: ''
         };
     }
 
     componentDidMount() {
         this.props.fetchServer(this.props.selectedServer.id);
+        this.props.fetchStartupCommands();
 
         let serverId = this.props.selectedServer.id;
         this.stomp = Stomp.over(() => SockJS('/ws'));
@@ -73,6 +78,12 @@ export class _ServerPage extends React.Component {
         this.stomp.disconnect(() => this.stomp.ws.close(), this.headers);
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.startupCommands !== this.props.startupCommands) {
+            this.setState({startupCommands: this.props.startupCommands});
+        }
+    }
+
     handleStart() {
         this.stomp.send('/start');
     }
@@ -81,15 +92,14 @@ export class _ServerPage extends React.Component {
         this.stomp.send('/shutdown');
     }
 
-    handleChangeCommandField(sc, field, isNumeric, event) {
-        let value = isNumeric ?
-            parseInt(event.target.value) : event.target.value;
-        sc[field] = value;
-    }
-
     handleChangeMap(event) {
         let map = event.target.files ? event.target.files[0] : null;
         this.setState({ map: map });
+    }
+
+    handleChangeModuleFile(event) {
+        let file = event.target.files ? event.target.files[0] : null;
+        this.setState({ moduleFile: file });
     }
 
     handleUploadMap() {
@@ -99,14 +109,69 @@ export class _ServerPage extends React.Component {
             httpclient.fetch('/api/uploadMap', {
                 method: 'POST',
                 body: form
-            })
-                .then(() => alert('Map uploaded successfully'));
+            }).then(() => alert('Map uploaded successfully'));
         }
+    }
+
+    handleUploadModuleFile() {
+        if (this.state.moduleFile) {
+            let form = new FormData();
+            form.append('file', this.state.moduleFile, this.state.moduleFile.name);
+            httpclient.fetch('/api/uploadModuleFile', {
+                method: 'POST',
+                body: form
+            }).then(() => alert('Module file uploaded successfully'));
+        }
+    }
+
+    handleChangeCommand(command, event) {
+        this.setState({
+            startupCommands: this.state.startupCommands.map(c =>
+                c.command === command ? Object.assign({}, c, {command: event.target.value}) : c)
+        });
+    }
+
+    handleChangeCommandValue(command, event) {
+        this.setState({
+            startupCommands: this.state.startupCommands.map(c =>
+                c.command === command ? Object.assign({}, c, {value: event.target.value}) : c)
+        });
+    }
+
+    handleChangeCommandOrder(command, event) {
+        this.setState({
+            startupCommands: this.state.startupCommands.map(c =>
+                c.command === command ? Object.assign({}, c, {order: parseInt(event.target.value)}) : c)
+        });
+    }
+
+    handleSaveStartupCommand(startupCommand) {
+        this.props.saveStartupCommand(startupCommand).then(() => this.props.fetchStartupCommands());
+    }
+
+    handleRemoveStartupCommand(command) {
+        this.props.removeStartupCommand(command).then(() => this.props.fetchStartupCommands());
+    }
+
+    handleChangeCommandToCreate(event) {
+        this.setState({commandToCreate: event.target.value});
+    }
+
+    handleChangeCommandValueToCreate(event) {
+        this.setState({commandValueToCreate: event.target.value});
+    }
+
+    handleCreateCommand() {
+        this.props.saveStartupCommand({
+            command: this.state.commandToCreate,
+            value: this.state.commandValueToCreate,
+            order: 1
+        }).then(() => this.props.fetchStartupCommands());
     }
 
     render() {
         const { server } = this.props;
-        const { serverStatus } = this.state;
+        const { serverStatus, startupCommands, commandToCreate, commandValueToCreate } = this.state;
 
         return (
             <div>
@@ -128,7 +193,17 @@ export class _ServerPage extends React.Component {
                     variant="contained"
                     color="secondary"
                     onClick={this.handleUploadMap.bind(this)}>Upload</Button>
-                {false &&
+
+                <h2>Upload Module File</h2>
+                <Input
+                    type="file"
+                    onChange={this.handleChangeModuleFile.bind(this)} />
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={this.handleUploadModuleFile.bind(this)}>Upload</Button>
+
+                {startupCommands &&
                 <TableContainer component={Paper}>
                     <Table size="small">
                         <TableHead>
@@ -136,24 +211,64 @@ export class _ServerPage extends React.Component {
                                 <TableCell>Order</TableCell>
                                 <TableCell>Command</TableCell>
                                 <TableCell>Value</TableCell>
+                                <TableCell/>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {server.startupCommands.map(sc =>
+                            {startupCommands.sort((a, b) => a.order - b.order).map(sc =>
                                 <TableRow key={sc.command}>
                                     <TableCell align="left">
-                                        <TextField value={sc.order} type="number" />
+                                        <TextField
+                                            value={sc.order} type="number"
+                                            onChange={this.handleChangeCommandOrder.bind(this, sc.command)}
+                                            onBlur={this.handleSaveStartupCommand.bind(this, sc)}
+                                        />
                                     </TableCell>
                                     <TableCell align="left">
-                                        <TextField fullWidth value={sc.command} />
+                                        <TextField fullWidth value={sc.command} disabled />
                                     </TableCell>
                                     <TableCell align="left">
-                                        <TextField fullWidth value={sc.value}
-                                            onChange={this.handleChangeCommandField.bind(this, sc, 'value', false)}/>
+                                        <TextField
+                                            fullWidth value={sc.value}
+                                            onChange={this.handleChangeCommandValue.bind(this, sc.command)}
+                                            onBlur={this.handleSaveStartupCommand.bind(this, sc)}
+                                        />
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <Button
+                                            variant="contained" color="primary"
+                                            onClick={this.handleRemoveStartupCommand.bind(this, sc.command)}
+                                        >
+                                            Remove
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <TextField
+                                        fullWidth value={commandToCreate}
+                                        onChange={this.handleChangeCommandToCreate.bind(this)}
+                                    />
+                                </TableCell>
+                                <TableCell align="left">
+                                    <TextField
+                                        fullWidth value={commandValueToCreate}
+                                        onChange={this.handleChangeCommandValueToCreate.bind(this)}
+                                    />
+                                </TableCell>
+                                <TableCell align="left">
+                                    <Button
+                                        variant="contained" color="primary"
+                                        onClick={this.handleCreateCommand.bind(this)}
+                                    >
+                                        Insert
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
                 }

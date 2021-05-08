@@ -13,7 +13,7 @@ import {
     player, professionAssignments, professionList,
     troopList
 } from "./player";
-import {authorities, logFiles, selectedServer, server, serverList} from "./server";
+import {authorities, logFiles, selectedServer, server, serverList, startupCommands} from "./server";
 import {
     craftingRecipes,
     craftingStation,
@@ -26,6 +26,7 @@ import {adminList, invitation} from "./admin/list";
 import {admin, assignedAuthorities, authorityList, ranks} from "./admin";
 import {door, doorKeys, doors} from "./door";
 import {board, boardAccessList, boards} from "./board";
+import {permissions, permissionsList} from "./permissions";
 
 export default combineReducers({
     playerList,
@@ -68,5 +69,7 @@ export default combineReducers({
     doorKeys,
     board,
     boards,
-    boardAccessList
+    boardAccessList,
+    startupCommands,
+    permissionsList
 });

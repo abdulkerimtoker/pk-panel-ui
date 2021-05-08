@@ -1,4 +1,5 @@
 import {ServerActions} from "../actions/server";
+import {act} from "react-dom/test-utils";
 
 export const server = (state = null, action) => {
     switch (action.type) {
@@ -38,4 +39,13 @@ export const logFiles = (state = null, action) => {
             return action.logFiles;
     }
     return state;
+};
+
+export const startupCommands = (state = null, action) => {
+    switch (action.type) {
+        case ServerActions.SUCCESS_RECEIVE_STARTUP_COMMANDS:
+            return action.startupCommands;
+        default:
+            return state;
+    }
 };

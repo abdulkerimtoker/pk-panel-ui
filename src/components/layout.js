@@ -43,6 +43,7 @@ import DoorList from "./door/list";
 import DoorPage from "./door";
 import BoardList from "./board/list";
 import BoardPage from "./board";
+import PermissionsList from "./permissions";
 
 const drawerWidth = 240;
 
@@ -235,7 +236,7 @@ class _MainLayout extends React.Component {
                             </ListItem>
                             }
                             {authorities.includes(`ROLE_${selectedServer.id}_BOARD_MANAGER`) &&
-                            <ListItem button key="doors" onClick={this.goToLink.bind(this, '/boards')}>
+                            <ListItem button key="boards" onClick={this.goToLink.bind(this, '/boards')}>
                                 <ListItemIcon>
                                     <DoorIcon/>
                                 </ListItemIcon>
@@ -257,6 +258,14 @@ class _MainLayout extends React.Component {
                                     <LogIcon/>
                                 </ListItemIcon>
                                 <ListItemText primary="Logs"/>
+                            </ListItem>
+                            }
+                            {authorities.includes(`ROLE_${selectedServer.id}_PERMISSIONS_MANAGER`) &&
+                            <ListItem button key="permissions" onClick={this.goToLink.bind(this, '/permissions')}>
+                                <ListItemIcon>
+                                    <LogIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Permissions"/>
                             </ListItem>
                             }
                             {authorities.includes(`ROLE_${selectedServer.id}_ADMIN_MANAGER`) &&
@@ -303,6 +312,7 @@ class _MainLayout extends React.Component {
                             <Route path="/door/:doorId" component={DoorPage} />
                             <Route path="/boards" component={BoardList} />
                             <Route path="/board/:boardId" component={BoardPage} />
+                            <Route path="/permissions" component={PermissionsList} />
                         </Switch>
                         :
                         <Grid container>
